@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import type { Prisma, PaymentStatus } from "@prisma/client";
+import type { Prisma, PaymentRecordStatus } from "@prisma/client";
 import { formatINR, formatDateTimeIST, PAYMENT_STATUS_LABELS } from "@/lib/store-config";
 import { env } from "@/lib/env";
 
@@ -8,7 +8,7 @@ type SearchParams = Promise<{ status?: string; search?: string }>;
 
 export default async function AdminPaymentsPage({ searchParams }: { searchParams: SearchParams }) {
   const sp = await searchParams;
-  const status = sp.status as PaymentStatus | undefined;
+  const status = sp.status as PaymentRecordStatus | undefined;
   const where: Prisma.PaymentWhereInput = {
     status: status ?? undefined,
     ...(sp.search ? { order: { orderNumber: { contains: sp.search, mode: "insensitive" } } } : {})

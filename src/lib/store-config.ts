@@ -20,8 +20,8 @@ export const STORE_CONFIG = {
   }
 };
 
-export function formatINR(amount: string | number | bigint): string {
-  const n = typeof amount === "bigint" ? Number(amount) : Number(amount);
+export function formatINR(amount: string | number | bigint | { toString(): string }): string {
+  const n = Number(typeof amount === "object" ? amount.toString() : amount);
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",

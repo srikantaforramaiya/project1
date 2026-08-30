@@ -2,7 +2,7 @@ import "server-only";
 import { prisma } from "@/lib/db";
 import { slugify } from "@/lib/api-helpers";
 import { productSchema } from "@/lib/validations";
-import type { Prisma, Product, Category } from "@prisma/client";
+import type { Product, Category } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 
 export type ProductListFilters = {

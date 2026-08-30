@@ -1,22 +1,11 @@
 import "server-only";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { ALLOWED_TRANSITIONS } from "./order-transitions";
 import type { Order, OrderStatus, Prisma } from "@prisma/client";
 
 export type StatusTransitionResult = { ok: boolean; error?: string };
 
-const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  PENDING_PAYMENT: ["CANCELLED"],
-  PAYMENT_RECEIVED: ["CONFIRMED", "CANCELLED", "REFUND_PENDING"],
-  CONFIRMED: ["PREPARING", "CANCELLED", "REFUND_PENDING"],
-  PREPARING: ["READY", "CANCELLED", "REFUND_PENDING"],
-  READY: ["OUT_FOR_DELIVERY", "CANCELLED", "REFUND_PENDING"],
-  OUT_FOR_DELIVERY: ["DELIVERED", "REFUND_PENDING"],
-  DELIVERED: ["REFUND_PENDING"],
-  CANCELLED: ["REFUND_PENDING"],
-  REFUND_PENDING: ["REFUNDED"],
-  REFUNDED: []
-};
 
 export async function updateOrderStatus(params: {
   orderId: string;

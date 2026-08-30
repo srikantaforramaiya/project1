@@ -15,7 +15,7 @@ const schema = z.object({ orderNumber: z.string().min(5), outcome: z.enum(["succ
  */
 export async function POST(request: Request) {
   try {
-    if (isProduction || env.PAYMENT_MODE !== "mock") {
+    if (isProduction() || env.PAYMENT_MODE !== "mock") {
       return jsonError("Not available.", 404);
     }
     const user = await requireUser();

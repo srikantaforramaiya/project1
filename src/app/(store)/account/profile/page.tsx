@@ -30,7 +30,8 @@ export default function ProfilePage() {
     const data = await res.json().catch(() => null);
     setSaving(false);
     if (!res.ok) {
-      push(data?.fields ? Object.values(data.fields)[0]?.[0] : (data?.error ?? "Update failed."), "error");
+      const firstError = data?.fields ? (Object.values(data.fields)[0] as string[] | undefined)?.[0] : undefined;
+      push(firstError ?? data?.error ?? "Update failed.", "error");
       return;
     }
     push("Profile updated.");

@@ -2,8 +2,12 @@ import "server-only";
 import { prisma } from "@/lib/db";
 import { STORE_CONFIG, CURRENCY } from "@/lib/store-config";
 import { toMinorUnits, getPaymentProvider } from "@/services/payment.service";
+import { computeTotals } from "@/services/order-totals";
+import { generateOrderNumber } from "@/services/order-number";
 import { logger } from "@/lib/logger";
 import { Prisma, type Order } from "@prisma/client";
+
+export { generateOrderNumber };
 
 export class OrderError extends Error {
   status: number;
@@ -15,20 +19,6 @@ export class OrderError extends Error {
   }
 }
 
-export function generateOrderNumber(): string {
-  const date = new Date();
-  const ymd = `${date.getUTCFullYear()}${String(date.getUTCMonth() + 1).padStart(2, "0")}${String(date.getUTCDate()).padStart(2, "0")}`;
-  const rand = Math.floor(Math.random() * 900000 + 100000);
-  return `FOOD-${ymd}-${rand}`;
-}
-
-function computeTotals(subtotal: number): { subtotal: number; deliveryCharge: number; taxAmount: number; grandTotal: number } {
-  const deliveryCharge =
-    subtotal <= 0 ? 0 : subtotal >= STORE_CONFIG.freeDeliveryThreshold ? 0 : STORE_CONFIG.deliveryFee;
-  const taxAmount = 0;
-  const grandTotal = subtotal + deliveryCharge + taxAmount;
-  return { subtotal, deliveryCharge, taxAmount, grandTotal };
-}
 
 export function formatAddressSnapshot(addr: {
   label: string; recipientName: string; phone: string; addressLine1: string; addressLine2?: string | null;

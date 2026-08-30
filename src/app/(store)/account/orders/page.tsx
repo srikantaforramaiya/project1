@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import type { OrderStatus } from "@prisma/client";
 import { formatINR, formatDateTimeIST, PAYMENT_STATUS_LABELS, ORDER_STATUS_LABELS } from "@/lib/store-config";
 import { Package } from "lucide-react";
 
@@ -13,7 +14,7 @@ const FILTERS: { key: string; label: string }[] = [
   { key: "cancelled", label: "Cancelled" }
 ];
 
-const ACTIVE_STATUSES = ["PENDING_PAYMENT", "PAYMENT_RECEIVED", "CONFIRMED", "PREPARING", "READY", "OUT_FOR_DELIVERY"];
+const ACTIVE_STATUSES: OrderStatus[] = ["PENDING_PAYMENT", "PAYMENT_RECEIVED", "CONFIRMED", "PREPARING", "READY", "OUT_FOR_DELIVERY"];
 
 export default async function MyOrdersPage({ searchParams }: { searchParams: SearchParams }) {
   const { filter = "all" } = await searchParams;

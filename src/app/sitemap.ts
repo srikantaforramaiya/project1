@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next";
-import { env } from "@/lib/env";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = env.NEXT_PUBLIC_APP_URL;
+  const base = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   const now = new Date();
   // Public storefront pages only — admin and account routes are excluded.
   return [

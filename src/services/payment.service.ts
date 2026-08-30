@@ -3,85 +3,23 @@ import crypto from "crypto";
 import { env, isProduction } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import { prisma } from "@/lib/db";
+import { MockPaymentProvider } from "./payment-provider.impl";
+import type { PaymentProvider } from "./payment-provider.types";
 import type { Payment } from "@prisma/client";
 
-export type CreatePaymentOrderResult = {
-  providerOrderId: string;
-  provider: string;
-  amount: number; // minor units (paise)
-  checkoutUrl?: string;
-};
+export { MockPaymentProvider };
+export type { PaymentProvider };
 
-export type VerifyPaymentResult = {
-  valid: boolean;
-  providerPaymentId?: string;
-  upiTransactionId?: string;
-  signature?: string;
-  failureReason?: string;
-};
-
-export interface PaymentProvider {
-  readonly name: string;
-  createPaymentOrder(params: { orderNumber: string; amountMinorUnits: number; customerEmail: string; customerPhone: string }): Promise<CreatePaymentOrderResult>;
-  verifyPayment(params: { providerOrderId: string; providerPaymentId: string; signature: string; amountMinorUnits: number }): Promise<VerifyPaymentResult>;
-  verifyWebhookSignature(rawBody: string, signatureHeader: string | null): boolean;
-  extractWebhookEvent(rawBody: string): { providerPaymentId: string; providerOrderId: string; status: "PAID" | "FAILED" | "CANCELLED" };
-}
-
-/**
- * Development-only mock provider. Hard-blocked in production (also enforced by env validation).
- * Simulates a UPI intent flow; verifies signatures with the same HMAC construction Razorpay uses
- * so the server-side verification path is exercised end-to-end.
- */
-export class MockPaymentProvider implements PaymentProvider {
-  readonly name = "mock-upi";
-
-  async createPaymentOrder({ orderNumber, amountMinorUnits }: { orderNumber: string; amountMinorUnits: number; customerEmail: string; customerPhone: string }) {
-    return {
-      providerOrderId: `mock_order_${orderNumber}`,
-      provider: this.name,
-      amount: amountMinorUnits,
-      checkoutUrl: `/checkout/mock-pay/${orderNumber}`
-    };
-  }
-
-  verifyPayment({ providerOrderId, providerPaymentId, signature }: { providerOrderId: string; providerPaymentId: string; signature: string; amountMinorUnits: number }) {
-    const expected = crypto
-      .createHmac("sha256", env.PAYMENT_PROVIDER_KEY_SECRET || "mock_secret")
-      .update(`${providerOrderId}|${providerPaymentId}`)
-      .digest("hex");
-    if (signature === expected) {
-      return { valid: true, providerPaymentId, upiTransactionId: `UPI${providerPaymentId.slice(-10).toUpperCase()}`, signature };
-    }
-    return { valid: false, failureReason: "Invalid payment signature" };
-  }
-
-  verifyWebhookSignature(rawBody: string, signatureHeader: string | null): boolean {
-    if (!signatureHeader) return false;
-    const expected = crypto.createHmac("sha256", env.PAYMENT_WEBHOOK_SECRET || "mock_webhook_secret").update(rawBody).digest("hex");
-    try {
-      return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signatureHeader));
-    } catch {
-      return false;
-    }
-  }
-
-  extractWebhookEvent(rawBody: string) {
-    const body = JSON.parse(rawBody) as { providerPaymentId: string; providerOrderId: string; status: "PAID" | "FAILED" | "CANCELLED" };
-    return { providerPaymentId: body.providerPaymentId, providerOrderId: body.providerOrderId, status: body.status };
-  }
+export function toMinorUnits(amount: string | number): number {
+  return Math.round(Number(amount) * 100);
 }
 
 export function getPaymentProvider(): PaymentProvider {
   if (env.PAYMENT_MODE === "razorpay") return new RazorpayPaymentProvider();
-  if (isProduction) {
+  if (isProduction()) {
     throw new Error("Mock payments are disabled in production.");
   }
   return new MockPaymentProvider();
-}
-
-export function toMinorUnits(amount: string | number): number {
-  return Math.round(Number(amount) * 100);
 }
 
 /** Razorpay UPI provider. Requires PAYMENT_PROVIDER_KEY_ID / KEY_SECRET / PAYMENT_WEBHOOK_SECRET. */
@@ -208,4 +146,5 @@ export async function markPaymentFailed(paymentId: string, reason: string): Prom
     });
   }
 }
+
 

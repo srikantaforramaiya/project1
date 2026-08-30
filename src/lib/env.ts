@@ -25,7 +25,10 @@ const schema = z.object({
 
 type Env = z.infer<typeof schema>;
 
-function loadEnv(): Env {
+let cached: Env | null = null;
+
+function getEnv(): Env {
+  if (cached) return cached;
   const parsed = schema.safeParse(process.env);
   if (!parsed.success) {
     // Never print secret values — only which keys failed.
@@ -39,8 +42,18 @@ function loadEnv(): Env {
   if (env.PAYMENT_MODE === "razorpay" && (!env.PAYMENT_PROVIDER_KEY_ID || !env.PAYMENT_PROVIDER_KEY_SECRET)) {
     throw new Error("PAYMENT_MODE=razorpay requires PAYMENT_PROVIDER_KEY_ID and PAYMENT_PROVIDER_KEY_SECRET.");
   }
+  cached = env;
   return env;
 }
 
-export const env = loadEnv();
-export const isProduction = env.NODE_ENV === "production";
+/**
+ * Lazy, validated environment access. Validation runs on first access at runtime
+ * (not at module import), so builds never require real secrets.
+ */
+export const env: Env = new Proxy({} as Env, {
+  get(_, key: string) {
+    return getEnv()[key as keyof Env];
+  }
+});
+
+export const isProduction = (): boolean => getEnv().NODE_ENV === "production";

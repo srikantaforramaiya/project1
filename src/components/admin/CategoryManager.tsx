@@ -35,7 +35,7 @@ export function CategoryManager({ categories }: { categories: Category[] }) {
     router.refresh();
   }
 
-  const showForm = creating || editing;
+  const showForm = creating || editing !== null;
   const current = editing;
 
   return (

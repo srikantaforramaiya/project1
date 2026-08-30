@@ -44,7 +44,7 @@ export async function runDynamicReport(params: DynamicReportParams) {
         quantity: true,
         lineTotal: true,
         order: { select: { orderNumber: true, grandTotal: true } },
-        product: byProduct ? { select: { name: true } } : { select: { category: { select: { name: true } } } }
+        product: { select: { name: true, category: { select: { name: true } } } }
       }
     });
     const map = new Map<string, { label: string; revenue: number; quantity: number; orderKeys: Set<string>; totals: number[] }>();

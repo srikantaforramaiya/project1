@@ -30,7 +30,13 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
   };
 
   const [orders, total] = await Promise.all([
-    prisma.order.findMany({ where, orderBy: { createdAt: "desc" }, skip: (page - 1) * 25, take: 25 }),
+    prisma.order.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * 25,
+      take: 25,
+      include: { _count: { select: { items: true } } }
+    }),
     prisma.order.count({ where })
   ]);
 
