@@ -7,388 +7,72 @@
   - Environments: .env
 
  ✓ Starting...
- ✓ Ready in 5.9s
+ ✓ Ready in 14.6s
  ○ Compiling / ...
- ✓ Compiled / in 13.5s (766 modules)
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- GET / 500 in 5491ms
- GET / 500 in 17073ms
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- GET / 500 in 684ms
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- GET / 500 in 533ms
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- GET / 500 in 945ms
- ✓ Compiled in 965ms (766 modules)
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.count()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.product.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-prisma:error 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- ⨯ PrismaClientInitializationError: 
-Invalid `prisma.category.findMany()` invocation:
-
-
-Authentication failed against database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`, the provided database credentials for `(not available)` are not valid.
-
-Please make sure to provide valid database credentials for the database server at `dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud`.
-    at async Promise.all (index 2)
-    at async HomePage (page.tsx:28:66)
-digest: "2549093314"
- GET / 500 in 1043ms
+ ✓ Compiled / in 24.2s (766 modules)
+ GET / 200 in 26045ms
+ GET / 200 in 4641ms
+ GET / 200 in 479ms
+ ○ Compiling /api/auth/session ...
+ ✓ Compiled /api/auth/session in 680ms (466 modules)
+ GET /api/auth/session 200 in 2060ms
+ GET /api/auth/session 200 in 42ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
+ ○ Compiling /auth/login ...
+ ✓ Compiled /auth/login in 1208ms (777 modules)
+ GET /api/auth/session 200 in 91ms
+ ✓ Compiled /auth/register in 384ms (765 modules)
+ GET /api/auth/session 200 in 47ms
+ GET /api/auth/session 200 in 101ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ ✓ Compiled /menu in 504ms (771 modules)
+ GET /api/auth/session 200 in 42ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ GET /menu?search=&category=&sort=name-asc&veg=1 200 in 450ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ GET /api/auth/session 200 in 52ms
+ GET /api/auth/session 200 in 26ms
+ GET /menu?search=&category=breakfast&sort=name-asc 200 in 387ms
+ GET /api/auth/session 200 in 36ms
+ GET /api/auth/session 200 in 20ms
+ GET /api/auth/session 200 in 109ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
+ ○ Compiling /cart ...
+ ✓ Compiled /cart in 980ms (783 modules)
+ ○ Compiling /api/cart ...
+ ✓ Compiled /api/cart in 600ms (487 modules)
+ ✓ Compiled in 1ms (487 modules)
+ GET /api/auth/session 200 in 1008ms
+ ✓ Compiled in 0ms (487 modules)
+ ✓ Compiled in 1ms (487 modules)
+ GET /api/cart 401 in 1563ms
+ ✓ Compiled in 0ms (487 modules)
+ ✓ Compiled in 0ms (487 modules)
+ ✓ Compiled in 2ms (487 modules)
+ ✓ Compiled in 0ms (487 modules)
+ GET /api/cart 401 in 939ms
+ GET /api/auth/session 200 in 558ms
+ GET /api/auth/session 200 in 36ms
+ ✓ Compiled /api/auth/register in 379ms (491 modules)
+ POST /api/auth/register 200 in 1239ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ GET /api/auth/session 200 in 312ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ GET /api/auth/session 200 in 505ms
+ ○ Compiling /api/cart/items ...
+ ✓ Compiled /api/cart/items in 1064ms (493 modules)
+ POST /api/cart/items 200 in 1861ms
+ POST /api/cart/items 200 in 904ms
+ GET /api/auth/session 200 in 229ms
+ GET /api/cart 200 in 362ms
+ GET /api/cart 200 in 914ms
+ ○ Compiling /src/middleware ...
+ ✓ Compiled /src/middleware in 1795ms (152 modules)
+ ○ Compiling /checkout ...
+ ✓ Compiled /checkout in 836ms (806 modules)
+ GET /api/auth/session 200 in 104ms

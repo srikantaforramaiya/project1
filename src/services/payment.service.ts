@@ -90,7 +90,7 @@ export async function confirmPaymentPaid(opts: {
   providerPaymentId: string;
   upiTransactionId?: string;
   signature?: string;
-  source: "client_verify" | "webhook";
+  source: "client_verify" | "webhook" | "admin_verify";
 }): Promise<{ alreadyPaid: boolean }> {
   const { payment } = opts;
   if (payment.status === "PAID") {

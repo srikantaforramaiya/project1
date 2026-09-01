@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
 import { handleApiError, jsonError } from "@/lib/api-helpers";
 import { getPaymentProvider } from "@/services/payment.service";
 import { env } from "@/lib/env";
+import { STORE_CONFIG, BUSINESS_NAME } from "@/lib/store-config";
 
 /** Public payment config for the client payment page. Never exposes secrets. */
 export async function GET(request: Request) {
@@ -27,6 +27,9 @@ export async function GET(request: Request) {
       amountMinorUnits: payment ? Math.round(Number(payment.amount) * 100) : 0,
       orderNumber: order.orderNumber,
       grandTotal: Number(order.grandTotal),
+      paymentStatus: order.paymentStatus,
+      upiVpa: STORE_CONFIG.upiVpa,
+      payeeName: BUSINESS_NAME,
       customer: { name: order.customerName, email: order.customerEmail, phone: order.customerPhone }
     });
   } catch (err) {

@@ -7,6 +7,7 @@ export const CURRENCY = "INR";
 
 /** Store configuration — later backed by an admin-editable settings table. */
 export const STORE_CONFIG = {
+  upiVpa: "srikantak1@okicici",
   deliveryEnabled: true,
   deliveryFee: 30,
   freeDeliveryThreshold: 500,
