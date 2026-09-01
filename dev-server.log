@@ -76,3 +76,38 @@
  ○ Compiling /checkout ...
  ✓ Compiled /checkout in 836ms (806 modules)
  GET /api/auth/session 200 in 104ms
+ ○ Compiling /account ...
+ ✓ Compiled /account in 4.3s (781 modules)
+ ○ Compiling /api/cart ...
+ ✓ Compiled /api/cart in 745ms (481 modules)
+ ✓ Compiled (483 modules)
+ GET /api/auth/session 200 in 4035ms
+ GET /api/cart 200 in 4190ms
+ GET /api/cart 200 in 259ms
+ ✓ Compiled in 6.1s (787 modules)
+ ✓ Compiled in 4.4s (939 modules)
+ ✓ Compiled in 1028ms (318 modules)
+ ✓ Compiled in 1662ms (318 modules)
+ ○ Compiling /account ...
+ ✓ Compiled /account in 584ms (477 modules)
+ ✓ Compiled /api/auth/session in 448ms (481 modules)
+ GET /api/auth/session 200 in 3890ms
+ ○ Compiling /api/cart ...
+ ✓ Compiled /api/cart in 2.2s (483 modules)
+ GET /api/auth/session 200 in 3739ms
+ GET /api/cart 200 in 4945ms
+ GET /api/cart 200 in 485ms
+ GET /api/auth/session 200 in 123ms
+ ○ Compiling / ...
+ ✓ Compiled / in 848ms (497 modules)
+ ✓ Compiled /api/auth/session in 259ms (501 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ GET /api/auth/session 200 in 1709ms
+ ○ Compiling /api/cart ...
+ ✓ Compiled /api/cart in 1294ms (498 modules)
+ GET /api/auth/session 200 in 2748ms
+ GET /api/cart 200 in 3040ms
+ GET /api/cart 200 in 224ms
+ GET /api/auth/session 200 in 126ms
+ ✓ Compiled in 1610ms (318 modules)
+ ✓ Compiled in 1427ms (318 modules)
