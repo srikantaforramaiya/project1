@@ -7,7 +7,7 @@ import { useToast } from "@/components/ui/toast";
 
 /** Allowed next statuses (mirror of the server transition map, for UX only). */
 const NEXT: Record<string, string[]> = {
-  PENDING_PAYMENT: ["CANCELLED"],
+  PENDING_PAYMENT: ["PAYMENT_RECEIVED", "CANCELLED"],
   PAYMENT_RECEIVED: ["CONFIRMED", "CANCELLED", "REFUND_PENDING"],
   CONFIRMED: ["PREPARING", "CANCELLED", "REFUND_PENDING"],
   PREPARING: ["READY", "CANCELLED", "REFUND_PENDING"],

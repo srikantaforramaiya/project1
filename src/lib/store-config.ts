@@ -8,12 +8,14 @@ export const CURRENCY = "INR";
 /** Store configuration — later backed by an admin-editable settings table. */
 export const STORE_CONFIG = {
   upiVpa: "srikantak1@okicici",
+  sellerPhone: "9790719925",
   deliveryEnabled: true,
   deliveryFee: 30,
   freeDeliveryThreshold: 500,
   minimumOrderAmount: 99,
   taxPercent: 0,
-  serviceablePostalCodes: ["560001", "560002", "560003", "560004", "560037", "560066", "560100"] as string[],
+  // ["*"] = deliver to all PIN codes. Replace with specific codes (e.g. ["560038","560001"]) to restrict.
+  serviceablePostalCodes: ["*"] as string[],
   defaultPreparationMinutes: 30,
   businessHours: {
     openHour: 8,

@@ -2,7 +2,7 @@ import "server-only";
 import { prisma } from "@/lib/db";
 import { STORE_CONFIG, CURRENCY } from "@/lib/store-config";
 import { toMinorUnits, getPaymentProvider } from "@/services/payment.service";
-import { computeTotals } from "@/services/order-totals";
+import { computeTotals, isServiceablePin } from "@/services/order-totals";
 import { generateOrderNumber } from "@/services/order-number";
 import { logger } from "@/lib/logger";
 import { Prisma, type Order } from "@prisma/client";
@@ -59,7 +59,7 @@ export async function createOrderFromCart(params: {
     throw new OrderError("Please select a valid delivery address.", 422, { addressId: ["Invalid delivery address."] });
   }
 
-  if (!STORE_CONFIG.serviceablePostalCodes.includes(address.postalCode)) {
+  if (!isServiceablePin(address.postalCode)) {
     throw new OrderError(
       `Sorry, delivery is currently unavailable for PIN code ${address.postalCode}.`,
       422,

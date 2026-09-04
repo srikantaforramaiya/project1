@@ -7,107 +7,206 @@
   - Environments: .env
 
  ✓ Starting...
- ✓ Ready in 14.6s
+ ✓ Ready in 15.4s
  ○ Compiling / ...
- ✓ Compiled / in 24.2s (766 modules)
- GET / 200 in 26045ms
- GET / 200 in 4641ms
- GET / 200 in 479ms
+ ✓ Compiled / in 32.9s (766 modules)
+ GET / 200 in 37013ms
+ ○ Compiling /menu ...
+ ✓ Compiled /menu in 5.1s (772 modules)
+ GET /menu 200 in 5660ms
+ GET /menu 200 in 1511ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
  ○ Compiling /api/auth/session ...
- ✓ Compiled /api/auth/session in 680ms (466 modules)
- GET /api/auth/session 200 in 2060ms
- GET /api/auth/session 200 in 42ms
- ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
- ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
- ○ Compiling /auth/login ...
- ✓ Compiled /auth/login in 1208ms (777 modules)
- GET /api/auth/session 200 in 91ms
- ✓ Compiled /auth/register in 384ms (765 modules)
- GET /api/auth/session 200 in 47ms
- GET /api/auth/session 200 in 101ms
- ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
- ✓ Compiled /menu in 504ms (771 modules)
- GET /api/auth/session 200 in 42ms
- ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
- ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
- GET /menu?search=&category=&sort=name-asc&veg=1 200 in 450ms
- ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
- ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
- GET /api/auth/session 200 in 52ms
- GET /api/auth/session 200 in 26ms
- GET /menu?search=&category=breakfast&sort=name-asc 200 in 387ms
- GET /api/auth/session 200 in 36ms
- GET /api/auth/session 200 in 20ms
- GET /api/auth/session 200 in 109ms
- ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
- ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
+ ✓ Compiled /api/auth/session in 745ms (471 modules)
+ GET /api/auth/session 200 in 3299ms
+ GET /api/auth/session 200 in 747ms
  ○ Compiling /cart ...
- ✓ Compiled /cart in 980ms (783 modules)
+ ✓ Compiled /cart in 1400ms (752 modules)
+ GET /api/auth/session 200 in 391ms
  ○ Compiling /api/cart ...
- ✓ Compiled /api/cart in 600ms (487 modules)
- ✓ Compiled in 1ms (487 modules)
- GET /api/auth/session 200 in 1008ms
- ✓ Compiled in 0ms (487 modules)
- ✓ Compiled in 1ms (487 modules)
- GET /api/cart 401 in 1563ms
- ✓ Compiled in 0ms (487 modules)
- ✓ Compiled in 0ms (487 modules)
- ✓ Compiled in 2ms (487 modules)
- ✓ Compiled in 0ms (487 modules)
- GET /api/cart 401 in 939ms
- GET /api/auth/session 200 in 558ms
- GET /api/auth/session 200 in 36ms
- ✓ Compiled /api/auth/register in 379ms (491 modules)
- POST /api/auth/register 200 in 1239ms
- ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
- GET /api/auth/session 200 in 312ms
+ ✓ Compiled /api/cart in 579ms (458 modules)
+ GET /api/cart 200 in 1505ms
+ GET /api/cart 200 in 215ms
+ ○ Compiling /src/middleware ...
+ ✓ Compiled /src/middleware in 1835ms (152 modules)
+ ○ Compiling /checkout ...
+ ✓ Compiled /checkout in 1145ms (770 modules)
+ GET /api/auth/session 200 in 114ms
+ ✓ Compiled in 9.4s (778 modules)
+ ✓ Compiled in 3.2s (916 modules)
+ ✓ Compiled in 1561ms (316 modules)
+ ○ Compiling /api/auth/login ...
+ ✓ Compiled /api/auth/login in 1985ms (467 modules)
+ POST /api/auth/login 200 in 5435ms
+ GET /menu 200 in 712ms
+ ✓ Compiled /api/cart/items in 329ms (469 modules)
+ POST /api/cart/items 200 in 987ms
+ ✓ Compiled /api/account/addresses in 349ms (471 modules)
+ GET /api/account/addresses 200 in 535ms
+ ○ Compiling /api/checkout ...
+ ✓ Compiled /api/checkout in 1099ms (478 modules)
+ POST /api/checkout 422 in 1773ms
+ ○ Compiling /api/payments/qr ...
+ ✓ Compiled /api/payments/qr in 2.4s (544 modules)
+ GET /api/payments/qr?orderNumber=undefined 404 in 2907ms
+ POST /api/auth/login 200 in 1059ms
+ GET /api/payments/qr?orderNumber=undefined 404 in 92ms
+ ✓ Compiled /api/payments/notify in 322ms (546 modules)
+ POST /api/payments/notify 422 in 502ms
+ POST /api/auth/login 200 in 1132ms
+ ○ Compiling /api/admin/orders/[orderNumber]/status ...
+ ✓ Compiled /api/admin/orders/[orderNumber]/status in 1627ms (597 modules)
+ PATCH /api/admin/orders/undefined/status 404 in 3222ms
+ POST /api/auth/login 200 in 1024ms
+ GET /menu 200 in 326ms
+ POST /api/auth/login 200 in 1599ms
+ GET /menu 200 in 222ms
+ POST /api/cart/items 200 in 1034ms
+ GET /api/account/addresses 200 in 460ms
+ POST /api/checkout 422 in 325ms
+ GET /api/payments/qr?orderNumber=undefined 404 in 127ms
+ POST /api/auth/login 200 in 589ms
+ GET /api/payments/qr?orderNumber=undefined 404 in 106ms
+ POST /api/payments/notify 422 in 69ms
+ POST /api/auth/login 200 in 791ms
+ PATCH /api/admin/orders/undefined/status 404 in 932ms
+ POST /api/auth/login 200 in 711ms
+ GET /menu 200 in 246ms
+ POST /api/cart/items 200 in 569ms
+ GET /api/account/addresses 200 in 123ms
+ POST /api/checkout 422 in 298ms
+ GET /api/payments/qr?orderNumber=undefined 404 in 153ms
+ POST /api/auth/login 200 in 592ms
+ GET /api/payments/qr?orderNumber=undefined 404 in 380ms
+ POST /api/payments/notify 422 in 330ms
+ POST /api/auth/login 200 in 664ms
+ PATCH /api/admin/orders/undefined/status 404 in 192ms
+ PATCH /api/admin/orders/undefined/status 403 in 59ms
+ ✓ Compiled in 7.1s (913 modules)
+ ✓ Compiled in 1774ms (913 modules)
+ POST /api/auth/login 200 in 1585ms
+ GET /menu 200 in 808ms
+ POST /api/cart/items 200 in 718ms
+ GET /api/account/addresses 200 in 853ms
+{"level":"info","time":"2026-09-02T04:12:31.315Z","message":"Order created","meta":"{\"orderNumber\":\"FOOD-20260902-258792\",\"provider\":\"mock-upi\"}"}
+ POST /api/checkout 200 in 1244ms
+ GET /api/payments/qr?orderNumber=FOOD-20260902-258792 200 in 222ms
+ POST /api/auth/login 200 in 759ms
+ GET /api/payments/qr?orderNumber=FOOD-20260902-258792 404 in 644ms
+{"level":"info","time":"2026-09-02T04:12:33.473Z","message":"Customer reported UPI payment","meta":"{\"orderNumber\":\"FOOD-20260902-258792\",\"paymentId\":\"cmtjkydfj000oubjwzj6rff7d\"}"}
+ POST /api/payments/notify 200 in 405ms
+ POST /api/auth/login 200 in 526ms
+ PATCH /api/admin/orders/FOOD-20260902-258792/status 409 in 324ms
+ PATCH /api/admin/orders/FOOD-20260902-258792/status 403 in 78ms
+ ✓ Compiled in 3.1s (913 modules)
+ ✓ Compiled in 1985ms (316 modules)
+ POST /api/auth/login 200 in 1028ms
+ GET /menu 200 in 430ms
+ POST /api/cart/items 200 in 592ms
+ GET /api/account/addresses 200 in 166ms
+{"level":"info","time":"2026-09-02T04:13:15.223Z","message":"Order created","meta":"{\"orderNumber\":\"FOOD-20260902-399481\",\"provider\":\"mock-upi\"}"}
+ POST /api/checkout 200 in 1309ms
+ GET /api/payments/qr?orderNumber=FOOD-20260902-399481 200 in 221ms
+ POST /api/auth/login 200 in 607ms
+ GET /api/payments/qr?orderNumber=FOOD-20260902-399481 404 in 98ms
+{"level":"info","time":"2026-09-02T04:13:16.542Z","message":"Customer reported UPI payment","meta":"{\"orderNumber\":\"FOOD-20260902-399481\",\"paymentId\":\"cmtjkzbbj0012ubjw4ejldfcv\"}"}
+ POST /api/payments/notify 200 in 270ms
+ POST /api/auth/login 200 in 530ms
+{"level":"info","time":"2026-09-02T04:13:17.510Z","message":"Order status changed","meta":"{\"orderNumber\":\"FOOD-20260902-399481\",\"from\":\"PENDING_PAYMENT\",\"to\":\"PAYMENT_RECEIVED\"}"}
+{"level":"info","time":"2026-09-02T04:13:18.258Z","message":"Payment confirmed","meta":"{\"paymentId\":\"cmtjkzbbj0012ubjw4ejldfcv\",\"source\":\"admin_verify\"}"}
+{"level":"warn","time":"2026-09-02T04:13:18.461Z","message":"Email not configured — skipping send","meta":"{\"to\":\"priya@example.com\",\"template\":\"order-confirmation\"}"}
+ PATCH /api/admin/orders/FOOD-20260902-399481/status 200 in 1439ms
+ PATCH /api/admin/orders/FOOD-20260902-399481/status 403 in 92ms
+ GET /menu 200 in 1081ms
  ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
  ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
- GET /api/auth/session 200 in 505ms
- ○ Compiling /api/cart/items ...
- ✓ Compiled /api/cart/items in 1064ms (493 modules)
- POST /api/cart/items 200 in 1861ms
- POST /api/cart/items 200 in 904ms
- GET /api/auth/session 200 in 229ms
- GET /api/cart 200 in 362ms
- GET /api/cart 200 in 914ms
- ○ Compiling /src/middleware ...
- ✓ Compiled /src/middleware in 1795ms (152 modules)
- ○ Compiling /checkout ...
- ✓ Compiled /checkout in 836ms (806 modules)
- GET /api/auth/session 200 in 104ms
- ○ Compiling /account ...
- ✓ Compiled /account in 4.3s (781 modules)
+ ○ Compiling /api/auth/session ...
+ ✓ Compiled /api/auth/session in 1910ms (466 modules)
+ GET /api/auth/session 200 in 2392ms
+ GET /api/auth/session 200 in 141ms
  ○ Compiling /api/cart ...
- ✓ Compiled /api/cart in 745ms (481 modules)
- ✓ Compiled (483 modules)
- GET /api/auth/session 200 in 4035ms
- GET /api/cart 200 in 4190ms
- GET /api/cart 200 in 259ms
- ✓ Compiled in 6.1s (787 modules)
- ✓ Compiled in 4.4s (939 modules)
- ✓ Compiled in 1028ms (318 modules)
- ✓ Compiled in 1662ms (318 modules)
+ ✓ Compiled /api/cart in 719ms (468 modules)
+ GET /api/auth/session 200 in 1626ms
+ GET /api/cart 200 in 1835ms
+ GET /api/cart 200 in 274ms
+ GET /api/auth/session 200 in 131ms
+ ✓ Compiled in 9.9s (778 modules)
+ ✓ Compiled in 4.7s (778 modules)
+ ✓ Compiled in 3.1s (778 modules)
+ ✓ Compiled in 3.3s (782 modules)
+ ○ Compiling /api/auth/login ...
+ ✓ Compiled /api/auth/login in 1027ms (469 modules)
+{"level":"error","time":"2026-09-02T04:20:40.691Z","message":"Unhandled API error","meta":"SyntaxError: Unexpected end of JSON input\nSyntaxError: Unexpected end of JSON input\n    at JSON.parse (<anonymous>)\n    at parseJSONFromBytes (node:internal/deps/undici/undici:5738:19)\n    at successSteps (node:internal/deps/undici/undici:5719:27)\n    at fullyReadBody (node:internal/deps/undici/undici:4609:9)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async consumeBody (node:internal/deps/undici/undici:5728:7)\n    at async POST (webpack-internal:///(rsc)/./src/app/api/auth/login/route.ts:19:22)\n    at async C:\\Project1\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:6:55778\n    at async eO.execute (C:\\Project1\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:6:46527)\n    at async eO.handle (C:\\Project1\\node_modules\\next\\dist\\compiled\\next-server\\app-route.runtime.dev.js:6:57112)\n    at async doRender (C:\\Project1\\node_modules\\next\\dist\\server\\base-server.js:1352:42)\n    at async cacheEntry.responseCache.get.routeKind (C:\\Project1\\node_modules\\next\\dist\\server\\base-server.js:1574:28)\n    at async DevServer.renderToResponseWithComponentsImpl (C:\\Project1\\node_modules\\next\\dist\\server\\base-server.js:1482:28)\n    at async DevServer.renderPageComponent (C:\\Project1\\node_modules\\next\\dist\\server\\base-server.js:1908:24)\n    at async DevServer.renderToResponseImpl (C:\\Project1\\node_modules\\next\\dist\\server\\base-server.js:1946:32)\n    at async DevServer.pipeImpl (C:\\Project1\\node_modules\\next\\dist\\server\\base-server.js:921:25)\n    at async NextNodeServer.handleCatchallRenderRequest (C:\\Project1\\node_modules\\next\\dist\\server\\next-server.js:272:17)\n    at async DevServer.handleRequestImpl (C:\\Project1\\node_modules\\next\\dist\\server\\base-server.js:817:17)\n    at async C:\\Project1\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:339:20\n    at async Span.traceAsyncFn (C:\\Project1\\node_modules\\next\\dist\\trace\\trace.js:154:20)\n    at async DevServer.handleRequest (C:\\Project1\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:336:24)\n    at async invokeRender (C:\\Project1\\node_modules\\next\\dist\\server\\lib\\router-server.js:173:21)\n    at async handleRequest (C:\\Project1\\node_modules\\next\\dist\\server\\lib\\router-server.js:350:24)\n    at async requestHandlerImpl (C:\\Project1\\node_modules\\next\\dist\\server\\lib\\router-server.js:374:13)\n    at async Server.requestListener (C:\\Project1\\node_modules\\next\\dist\\server\\lib\\start-server.js:141:13)"}
+ POST /api/auth/login 500 in 2513ms
+ ✓ Compiled /api/payments/qr in 433ms (535 modules)
+ GET /api/payments/qr?orderNumber=FOOD-20260902-399481 401 in 558ms
+ POST /api/auth/login 200 in 776ms
+ GET /checkout 200 in 394ms
+ GET /api/payments/qr?orderNumber=FOOD-20260902-399481 200 in 205ms
+ GET /checkout 200 in 763ms
+ ○ Compiling /api/auth/session ...
+ ✓ Compiled /api/auth/session in 938ms (537 modules)
+ GET /api/auth/session 200 in 1203ms
+ GET /api/auth/session 200 in 110ms
+ ○ Compiling /contact ...
+ ✓ Compiled /contact in 1170ms (773 modules)
+ ✓ Compiled /api/auth/session in 410ms (472 modules)
  ○ Compiling /account ...
- ✓ Compiled /account in 584ms (477 modules)
- ✓ Compiled /api/auth/session in 448ms (481 modules)
- GET /api/auth/session 200 in 3890ms
+ ✓ Compiled /account in 648ms (785 modules)
+ GET /api/auth/session 200 in 3907ms
+ GET /api/auth/session 200 in 176ms
+ ○ Compiling /account/addresses ...
+ ✓ Compiled /account/addresses in 856ms (795 modules)
+ GET /api/auth/session 200 in 131ms
+ ○ Compiling /api/account/addresses ...
+ ✓ Compiled /api/account/addresses in 615ms (488 modules)
+ GET /api/account/addresses 200 in 854ms
+ GET /api/account/addresses 200 in 105ms
+ POST /api/account/addresses 422 in 121ms
+ POST /api/account/addresses 422 in 133ms
+ POST /api/account/addresses 422 in 111ms
+ POST /api/account/addresses 422 in 487ms
+ POST /api/account/addresses 422 in 75ms
  ○ Compiling /api/cart ...
- ✓ Compiled /api/cart in 2.2s (483 modules)
- GET /api/auth/session 200 in 3739ms
- GET /api/cart 200 in 4945ms
- GET /api/cart 200 in 485ms
- GET /api/auth/session 200 in 123ms
+ ✓ Compiled /api/cart in 837ms (478 modules)
+ GET /api/auth/session 200 in 1543ms
+ GET /api/cart 200 in 2109ms
+ GET /api/cart 200 in 349ms
+ GET /api/auth/session 200 in 79ms
  ○ Compiling / ...
- ✓ Compiled / in 848ms (497 modules)
- ✓ Compiled /api/auth/session in 259ms (501 modules)
+ ✓ Compiled / in 797ms (499 modules)
+ GET / 200 in 4410ms
  ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
- GET /api/auth/session 200 in 1709ms
+ ✓ Compiled /api/auth/session in 494ms (503 modules)
+ GET /api/auth/session 200 in 1906ms
+ GET /api/auth/session 200 in 95ms
+ GET /api/auth/session 200 in 93ms
+ GET /api/auth/session 200 in 179ms
+ ○ Compiling /about ...
+ ✓ Compiled /about in 652ms (808 modules)
+ GET /api/auth/session 200 in 152ms
+ ✓ Compiled /cart in 502ms (505 modules)
  ○ Compiling /api/cart ...
- ✓ Compiled /api/cart in 1294ms (498 modules)
- GET /api/auth/session 200 in 2748ms
- GET /api/cart 200 in 3040ms
- GET /api/cart 200 in 224ms
+ ✓ Compiled /api/cart in 727ms (507 modules)
+ GET /api/auth/session 200 in 1364ms
+ GET /api/auth/session 200 in 117ms
+ GET /api/cart 200 in 1983ms
+ GET /api/cart 200 in 217ms
+ ○ Compiling /menu ...
+ ✓ Compiled /menu in 539ms (512 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
  GET /api/auth/session 200 in 126ms
- ✓ Compiled in 1610ms (318 modules)
- ✓ Compiled in 1427ms (318 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
+ GET /menu?search=&category=&sort=name-asc&available=1 200 in 1099ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
+ GET /api/auth/session 200 in 201ms
+ GET /api/auth/session 200 in 185ms
+ GET /api/auth/session 200 in 206ms
+ GET /api/cart 200 in 442ms
+ GET /api/cart 200 in 238ms
+ GET /api/auth/session 200 in 104ms
+ GET /checkout?label=Home+&recipientName=Srikanta+Sahoo&phone=9790719925&addressLine1=B202+VSL+Apt&addressLine2=&landmark=&city=Bangalore&state=Karnataka&postalCode=560067&isDefault=true 200 in 691ms
+ GET /api/auth/session 200 in 459ms
+ GET /api/auth/session 200 in 114ms

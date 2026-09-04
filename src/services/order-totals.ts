@@ -10,5 +10,6 @@ export function computeTotals(subtotal: number): { subtotal: number; deliveryCha
 }
 
 export function isServiceablePin(postalCode: string): boolean {
-  return STORE_CONFIG.serviceablePostalCodes.includes(postalCode);
+  const list = STORE_CONFIG.serviceablePostalCodes;
+  return list.includes("*") || list.includes(postalCode);
 }

@@ -30,6 +30,7 @@ export async function GET(request: Request) {
       paymentStatus: order.paymentStatus,
       upiVpa: STORE_CONFIG.upiVpa,
       payeeName: BUSINESS_NAME,
+      sellerPhone: STORE_CONFIG.sellerPhone,
       customer: { name: order.customerName, email: order.customerEmail, phone: order.customerPhone }
     });
   } catch (err) {

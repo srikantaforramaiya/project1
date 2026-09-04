@@ -1,3 +1,0 @@
-TABLES: Address, AdminAuditLog, Cart, CartItem, Category, EmailLog, Order, OrderItem, OrderStatusHistory, PasswordResetToken, Payment, Product, ProductImage, User, menu_items, orders
-ENUMS: Role, OrderStatus, PaymentStatus, PaymentRecordStatus, EmailStatus
-ROWCOUNTS: {"Address":0,"AdminAuditLog":0,"Cart":0,"CartItem":0,"Category":0,"EmailLog":0,"Order":0,"OrderItem":0,"OrderStatusHistory":0,"PasswordResetToken":0,"Payment":0,"Product":0,"ProductImage":0,"User":0,"menu_items":9,"orders":2}

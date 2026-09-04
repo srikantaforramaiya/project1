@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Smartphone, ShieldCheck, Loader2 } from "lucide-react";
-import { formatINR } from "@/lib/store-config";
+import { Smartphone, ShieldCheck, Loader2, Phone, MessageCircle } from "lucide-react";
+import { formatINR, STORE_CONFIG } from "@/lib/store-config";
 import { useToast } from "@/components/ui/toast";
 import type { CartLine } from "@/types/cart";
 
@@ -29,6 +29,7 @@ export function CheckoutForm({ lines, addresses, user, subtotal, deliveryCharge,
   const [notes, setNotes] = useState("");
   const [pending, setPending] = useState(false);
   const [addingAddress, setAddingAddress] = useState(false);
+  const [paidOrder, setPaidOrder] = useState<{ orderNumber: string; grandTotal: number } | null>(null);
 
   const address = addresses.find((a) => a.id === selectedAddress);
   const unsupportedPin = address ? !serviceablePostalCodes.includes(address.postalCode) : false;
@@ -53,7 +54,9 @@ export function CheckoutForm({ lines, addresses, user, subtotal, deliveryCharge,
       push(data?.error ?? "Could not place the order. Please review your cart.", "error");
       return;
     }
-    router.push(`/checkout/pay/${data.orderNumber}`);
+    // Show the UPI QR right here on the checkout page.
+    setPaidOrder({ orderNumber: data.orderNumber, grandTotal: data.grandTotal });
+    setPending(false);
   }
 
 
@@ -202,9 +205,63 @@ export function CheckoutForm({ lines, addresses, user, subtotal, deliveryCharge,
                 <>Pay {formatINR(grandTotal)} with UPI</>
               )}
             </button>
+            {!pending && !selectedAddress && (
+              <p className="mt-2 text-xs text-warning">Select or add a delivery address above to enable payment.</p>
+            )}
+            {!pending && unsupportedPin && (
+              <p className="mt-2 text-xs text-danger">Delivery is not available for the selected PIN code.</p>
+            )}
           </div>
         </aside>
       </form>
+
+      {/* UPI QR popup — appears right after the order is placed */}
+      {paidOrder && (
+        <div className="fixed inset-0 z-[95] flex items-center justify-center overflow-y-auto bg-background/90 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Scan and pay with UPI">
+          <div className="card-elevated my-8 w-full max-w-md p-6 text-center">
+            <h2 className="text-xl font-bold">Scan &amp; Pay with UPI</h2>
+            <p className="mt-1 text-sm text-text-secondary">Order {paidOrder.orderNumber}</p>
+            <p className="mt-2 text-3xl font-extrabold text-primary">{formatINR(paidOrder.grandTotal)}</p>
+
+            <div className="mx-auto mt-4 w-fit rounded-2xl bg-white p-3 shadow-neon-sm">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/api/payments/qr?orderNumber=${encodeURIComponent(paidOrder.orderNumber)}`}
+                alt={`UPI QR code to pay ${formatINR(paidOrder.grandTotal)} to ${STORE_CONFIG.upiVpa}`}
+                width={220}
+                height={220}
+              />
+            </div>
+
+            <div className="mt-4 rounded-xl border border-primary/40 bg-primary/5 p-3">
+              <p className="text-xs text-text-secondary">Paying to</p>
+              <p className="mt-0.5 font-mono text-sm font-bold text-primary">{STORE_CONFIG.upiVpa}</p>
+              <p className="text-xs text-text-secondary">({STORE_CONFIG.sellerPhone ? "Seller GPay / UPI" : "Seller UPI"})</p>
+            </div>
+
+            <p className="mt-4 text-sm text-text-secondary">
+              Scan with GPay, PhonePe, Paytm or any UPI app. After paying, inform the seller to confirm your order.
+            </p>
+            <div className="mt-3 flex justify-center gap-3">
+              <a href={`tel:+91${STORE_CONFIG.sellerPhone}`} className="btn-primary !px-4 !py-2 text-sm">
+                <Phone className="h-4 w-4" aria-hidden /> Call {STORE_CONFIG.sellerPhone}
+              </a>
+              <a
+                href={`https://wa.me/91${STORE_CONFIG.sellerPhone}?text=${encodeURIComponent(`Hi! I placed order ${paidOrder.orderNumber} on Neon Bites and have paid ${formatINR(paidOrder.grandTotal)} via UPI to ${STORE_CONFIG.upiVpa}. Please confirm my order.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary !px-4 !py-2 text-sm"
+              >
+                <MessageCircle className="h-4 w-4" aria-hidden /> WhatsApp
+              </a>
+            </div>
+
+            <Link href={`/account/orders/${paidOrder.orderNumber}`} className="btn-ghost mt-5 w-full">
+              Done — View My Orders
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
