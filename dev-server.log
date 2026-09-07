@@ -11,3 +11,26 @@
  ○ Compiling / ...
  ✓ Compiled / in 9.2s (768 modules)
  GET / 200 in 13582ms
+ GET / 200 in 730ms
+ ○ Compiling /api/auth/session ...
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ ✓ Compiled /api/auth/session in 975ms (467 modules)
+ GET /api/auth/session 200 in 3565ms
+ GET /api/auth/session 200 in 261ms
+ ✓ Compiled /api/auth/logout in 476ms (469 modules)
+ POST /api/auth/logout 200 in 662ms
+ ○ Compiling /auth/login ...
+ ✓ Compiled /auth/login in 1960ms (781 modules)
+ GET /api/auth/session 200 in 78ms
+ ○ Compiling /api/auth/login ...
+ ✓ Compiled /api/auth/login in 1029ms (478 modules)
+ POST /api/auth/login 200 in 3070ms
+ GET /api/auth/session 200 in 284ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ ○ Compiling /menu ...
+ ✓ Compiled /menu in 1715ms (777 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ GET /api/auth/session 200 in 429ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1571167530149-c72f2b6b4a83?w=800&q=80 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ GET /api/auth/session 200 in 134ms
