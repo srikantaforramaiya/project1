@@ -72,7 +72,7 @@ export const addressSchema = z.object({
   city: z.string().trim().min(2, "City is required.").max(80),
   state: z.string().trim().min(2, "State is required.").max(80),
   postalCode: z.string().trim().regex(/^\d{6}$/, "Please enter a valid 6-digit PIN code."),
-  isDefault: z.boolean().default(false)
+  isDefault: z.preprocess((v) => v === true || v === "true" || v === "on" || v === 1, z.boolean()).default(false)
 });
 
 export const productSchema = z.object({

@@ -14,8 +14,8 @@ export const STORE_CONFIG = {
   freeDeliveryThreshold: 500,
   minimumOrderAmount: 99,
   taxPercent: 0,
-  // ["*"] = deliver to all PIN codes. Replace with specific codes (e.g. ["560038","560001"]) to restrict.
-  serviceablePostalCodes: ["*"] as string[],
+  // Only these PIN codes are served (shop is at Belathur, Kadugodi, Bangalore). Add codes as delivery expands.
+  serviceablePostalCodes: ["560066", "560067"] as string[],
   defaultPreparationMinutes: 30,
   businessHours: {
     openHour: 8,

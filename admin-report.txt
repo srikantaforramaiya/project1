@@ -1,0 +1,34 @@
+PASS | A1.1 Admin API blocked without login
+PASS | A1.2 Customer blocked from admin API
+PASS | A1.3 Admin login
+PASS | A2.1 Dashboard renders
+PASS | A3.1 Create category
+PASS | A3.2 Update category
+PASS | A3.3 Duplicate category name gets unique slug (no crash)
+PASS | A4.1 Create product
+PASS | A4.2 Invalid product rejected (negative price)
+PASS | A4.3 Mark product sold out
+PASS | A4.4 Sold-out product shows 'Sold Out' on storefront
+PASS | A4.5 Edit product (price change)
+PASS | A4.6 New product visible & orderable by customer
+PASS | A4.7 Inventory decremented after order | stock=7
+PASS | A4.8 Archive product (soft delete)
+PASS | A4.9 Order history snapshot preserved after archive
+PASS | A5.1 Orders page renders
+PASS | A5.2 Invalid status transition (PENDING_PAYMENT→DELIVERED) rejected
+PASS | A5.3 Non-existent order handled
+PASS | A6.1 Customers page renders
+PASS | A6.2 Deactivate customer
+PASS | A6.3 Reactivate customer
+PASS | A6.4 Unknown customer handled
+PASS | A7.1 Payments page renders (gateway secrets hidden)
+PASS | A7.2 Reports page renders with KPIs
+PASS | A7.3 Custom report builder renders
+PASS | A7.4 CSV export works with report metadata
+PASS | A7.5 Custom report CSV export works
+PASS | A7.6 CSV export blocked for anonymous
+PASS | A8.1 Settings renders, DB credentials never shown
+PASS | A8.2 Audit logs render with product actions
+PASS | A8.3 Audit entries persisted in DB | count=22
+
+=== 32 passed / 32 total ===

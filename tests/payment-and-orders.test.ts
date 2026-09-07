@@ -71,17 +71,23 @@ describe("order totals (server-side pricing)", () => {
 });
 
 describe("delivery PIN code rules", () => {
-  it("accepts all PIN codes when the wildcard '*' is configured (default)", () => {
-    expect(isServiceablePin("560038")).toBe(true);
-    expect(isServiceablePin("999999")).toBe(true);
-  });
-
-  it("restricts to listed PIN codes when specific codes are configured", () => {
+  it("accepts only the serviceable PIN codes configured for the shop", () => {
     const original = [...STORE_CONFIG.serviceablePostalCodes];
     STORE_CONFIG.serviceablePostalCodes.length = 0;
-    STORE_CONFIG.serviceablePostalCodes.push("560038");
-    expect(isServiceablePin("560038")).toBe(true);
+    STORE_CONFIG.serviceablePostalCodes.push("560066", "560067");
+    expect(isServiceablePin("560066")).toBe(true);
+    expect(isServiceablePin("560067")).toBe(true);
+    expect(isServiceablePin("560038")).toBe(false);
     expect(isServiceablePin("999999")).toBe(false);
+    STORE_CONFIG.serviceablePostalCodes.length = 0;
+    STORE_CONFIG.serviceablePostalCodes.push(...original);
+  });
+
+  it("supports the wildcard '*' to serve every PIN code", () => {
+    const original = [...STORE_CONFIG.serviceablePostalCodes];
+    STORE_CONFIG.serviceablePostalCodes.length = 0;
+    STORE_CONFIG.serviceablePostalCodes.push("*");
+    expect(isServiceablePin("999999")).toBe(true);
     STORE_CONFIG.serviceablePostalCodes.length = 0;
     STORE_CONFIG.serviceablePostalCodes.push(...original);
   });

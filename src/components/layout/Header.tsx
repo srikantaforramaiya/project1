@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ShoppingBag, Menu as MenuIcon, X, User, LayoutDashboard, UtensilsCrossed } from "lucide-react";
+import { ShoppingBag, Menu as MenuIcon, X, User, LayoutDashboard, UtensilsCrossed, LogOut } from "lucide-react";
 import { BUSINESS_NAME } from "@/lib/store-config";
+import { LogoutButton } from "@/components/layout/LogoutButton";
 
 type SessionInfo = { name: string; role: string } | null;
 
@@ -77,9 +78,18 @@ export function Header({ cartCount }: { cartCount: number }) {
             </Link>
           )}
           {session ? (
-            <Link href="/account" className="btn-ghost hidden md:inline-flex !px-3 !py-2 text-xs">
-              <User className="h-4 w-4" aria-hidden /> {session.name.split(" ")[0]}
-            </Link>
+            <>
+              <Link href="/account" className="btn-ghost hidden md:inline-flex !px-3 !py-2 text-xs">
+                <User className="h-4 w-4" aria-hidden /> {session.name.split(" ")[0]}
+              </Link>
+              <button
+                onClick={logout}
+                className="hidden md:inline-flex items-center gap-1.5 rounded-xl border border-border px-3 py-2 text-xs text-text-secondary hover:border-danger/50 hover:text-danger transition-colors"
+                aria-label="Logout"
+              >
+                <LogOut className="h-3.5 w-3.5" aria-hidden /> Logout
+              </button>
+            </>
           ) : (
             <Link href="/auth/login" className="btn-ghost hidden md:inline-flex !px-3 !py-2 text-xs">
               Login

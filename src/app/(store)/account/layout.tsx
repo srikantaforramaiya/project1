@@ -1,6 +1,7 @@
-import Link from "next/link";
 import { requireUser } from "@/lib/auth";
-import { User, MapPin, Package, LayoutDashboard } from "lucide-react";
+import { User, MapPin, Package, LayoutDashboard, LogOut } from "lucide-react";
+import { LogoutButton } from "@/components/layout/LogoutButton";
+import Link from "next/link";
 
 export default async function AccountLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();
@@ -24,6 +25,9 @@ export default async function AccountLayout({ children }: { children: React.Reac
                 <l.icon className="h-4 w-4" aria-hidden /> {l.label}
               </Link>
             ))}
+            <div className="mt-2 border-t border-border pt-2">
+              <LogoutButton />
+            </div>
           </nav>
         </aside>
         <main>{children}</main>

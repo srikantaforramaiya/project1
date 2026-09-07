@@ -74,6 +74,7 @@ export function CheckoutForm({ lines, addresses, user, subtotal, deliveryCharge,
       return;
     }
     push("Address saved.");
+    if (data.address?.id) setSelectedAddress(data.address.id);
     setAddingAddress(false);
     router.refresh();
   }
@@ -124,26 +125,6 @@ export function CheckoutForm({ lines, addresses, user, subtotal, deliveryCharge,
                 </label>
               ))}
             </div>
-
-            {addingAddress && (
-              <div className="mt-4 grid gap-3 rounded-xl border border-border p-4 sm:grid-cols-2">
-                <input form="new-address-form" name="label" placeholder="Label (Home/Office)" className="input" required />
-                <input form="new-address-form" name="recipientName" placeholder="Recipient name" className="input" defaultValue={user.name} required />
-                <input form="new-address-form" name="phone" placeholder="Phone" className="input" defaultValue={user.phone} required />
-                <input form="new-address-form" name="addressLine1" placeholder="Address line 1" className="input" required />
-                <input form="new-address-form" name="addressLine2" placeholder="Address line 2 (optional)" className="input" />
-                <input form="new-address-form" name="landmark" placeholder="Landmark (optional)" className="input" />
-                <input form="new-address-form" name="city" placeholder="City" className="input" required />
-                <input form="new-address-form" name="state" placeholder="State" className="input" defaultValue="Karnataka" required />
-                <input form="new-address-form" name="postalCode" placeholder="PIN code (6 digits)" className="input" inputMode="numeric" pattern="\d{6}" required />
-                <label className="flex items-center gap-2 text-sm text-text-secondary">
-                  <input form="new-address-form" type="checkbox" name="isDefault" value="true" className="accent-primary" /> Make default
-                </label>
-                <button type="submit" form="new-address-form" className="btn-secondary sm:col-span-2">Save Address</button>
-              </div>
-            )}
-            {/* Hidden form host for the address inputs above (keeps them outside the main checkout form) */}
-            <form id="new-address-form" onSubmit={addNewAddress} className="hidden" aria-hidden="true" />
           </section>
 
           <section className="card p-6" aria-labelledby="payment-heading">
@@ -215,6 +196,33 @@ export function CheckoutForm({ lines, addresses, user, subtotal, deliveryCharge,
         </aside>
       </form>
 
+      {/* Add-address modal — rendered outside the main checkout form so nesting stays valid */}
+      {addingAddress && (
+        <div className="fixed inset-0 z-[90] flex items-center justify-center overflow-y-auto bg-background/90 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Add delivery address">
+          <form onSubmit={addNewAddress} className="card-elevated my-8 w-full max-w-lg p-6">
+            <h2 className="mb-4 text-lg font-semibold">Add Delivery Address</h2>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <input name="label" placeholder="Label (Home/Office)" className="input" required />
+              <input name="recipientName" placeholder="Recipient name" className="input" defaultValue={user.name} required />
+              <input name="phone" placeholder="Phone (10 digits)" className="input" defaultValue={user.phone} required />
+              <input name="postalCode" placeholder="PIN code (6 digits)" className="input" inputMode="numeric" pattern="\d{6}" required />
+              <input name="addressLine1" placeholder="Address line 1" className="input sm:col-span-2" required />
+              <input name="addressLine2" placeholder="Address line 2 (optional)" className="input sm:col-span-2" />
+              <input name="landmark" placeholder="Landmark (optional)" className="input sm:col-span-2" />
+              <input name="city" placeholder="City" className="input" required />
+              <input name="state" placeholder="State" className="input" defaultValue="Karnataka" required />
+              <label className="flex items-center gap-2 text-sm text-text-secondary">
+                <input type="checkbox" name="isDefault" value="true" defaultChecked={addresses.length === 0} className="accent-primary" /> Make default address
+              </label>
+            </div>
+            <div className="mt-4 flex justify-end gap-3">
+              <button type="button" className="btn-ghost" onClick={() => setAddingAddress(false)}>Cancel</button>
+              <button type="submit" className="btn-primary">Save Address</button>
+            </div>
+          </form>
+        </div>
+      )}
+
       {/* UPI QR popup — appears right after the order is placed */}
       {paidOrder && (
         <div className="fixed inset-0 z-[95] flex items-center justify-center overflow-y-auto bg-background/90 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Scan and pay with UPI">
@@ -240,8 +248,14 @@ export function CheckoutForm({ lines, addresses, user, subtotal, deliveryCharge,
             </div>
 
             <p className="mt-4 text-sm text-text-secondary">
-              Scan with GPay, PhonePe, Paytm or any UPI app. After paying, inform the seller to confirm your order.
+              Scan with GPay, PhonePe, Paytm or any UPI app, or pay directly to the UPI ID shown above. After paying, inform the seller to confirm your order.
             </p>
+            <a
+              href={`upi://pay?pa=${STORE_CONFIG.upiVpa}&pn=${encodeURIComponent("Neon Bites")}&am=${paidOrder.grandTotal.toFixed(2)}&cu=INR&tr=${paidOrder.orderNumber}`}
+              className="btn-secondary mt-3 w-full"
+            >
+              <Smartphone className="h-4 w-4" aria-hidden /> Open UPI App to Pay
+            </a>
             <div className="mt-3 flex justify-center gap-3">
               <a href={`tel:+91${STORE_CONFIG.sellerPhone}`} className="btn-primary !px-4 !py-2 text-sm">
                 <Phone className="h-4 w-4" aria-hidden /> Call {STORE_CONFIG.sellerPhone}
