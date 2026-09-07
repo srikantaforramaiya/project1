@@ -342,3 +342,7 @@
  GET /api/cart 200 in 1897ms
  GET /api/cart 200 in 292ms
  ○ Compiling /contact ...
+ ✓ Compiled /contact in 1514ms (1916 modules)
+ GET /api/auth/session 200 in 240ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1631452180441-3d515c7503ab?w=800&q=80 404
+ GET /api/auth/session 200 in 174ms
