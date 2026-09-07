@@ -18,10 +18,13 @@ export async function GET(request: Request) {
     });
     if (!order || order.userId !== user.id) return jsonError("Order not found.", 404);
     const payment = order.payments[0];
-    const provider = getPaymentProvider();
+    const providerName =
+      env.PAYMENT_MODE === "razorpay" ? "razorpay"
+      : env.PAYMENT_MODE === "mock" ? "mock-upi"
+      : "direct-upi";
     return NextResponse.json({
       mode: env.PAYMENT_MODE,
-      provider: provider.name,
+      provider: providerName,
       keyId: env.PAYMENT_PROVIDER_KEY_ID ?? null,
       providerOrderId: payment?.providerOrderId ?? null,
       amountMinorUnits: payment ? Math.round(Number(payment.amount) * 100) : 0,

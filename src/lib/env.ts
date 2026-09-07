@@ -13,7 +13,7 @@ const schema = z.object({
     .string()
     .optional()
     .transform((v) => v === "true"),
-  PAYMENT_MODE: z.enum(["mock", "razorpay"]).default("mock"),
+  PAYMENT_MODE: z.enum(["mock", "razorpay", "direct"]).default("direct"),
   PAYMENT_PROVIDER_KEY_ID: z.string().optional(),
   PAYMENT_PROVIDER_KEY_SECRET: z.string().optional(),
   PAYMENT_WEBHOOK_SECRET: z.string().optional(),
@@ -37,7 +37,7 @@ function getEnv(): Env {
   }
   const env = parsed.data;
   if (env.NODE_ENV === "production" && env.PAYMENT_MODE === "mock") {
-    throw new Error("PAYMENT_MODE=mock is not allowed in production. Configure a real payment gateway.");
+    throw new Error("PAYMENT_MODE=mock is not allowed in production. Use PAYMENT_MODE=direct (UPI QR) or razorpay.");
   }
   if (env.PAYMENT_MODE === "razorpay" && (!env.PAYMENT_PROVIDER_KEY_ID || !env.PAYMENT_PROVIDER_KEY_SECRET)) {
     throw new Error("PAYMENT_MODE=razorpay requires PAYMENT_PROVIDER_KEY_ID and PAYMENT_PROVIDER_KEY_SECRET.");

@@ -2,6 +2,7 @@ import "server-only";
 import { prisma } from "@/lib/db";
 import { STORE_CONFIG, CURRENCY } from "@/lib/store-config";
 import { toMinorUnits, getPaymentProvider } from "@/services/payment.service";
+import { env, isProduction } from "@/lib/env";
 import { computeTotals, isServiceablePin } from "@/services/order-totals";
 import { generateOrderNumber } from "@/services/order-number";
 import { logger } from "@/lib/logger";
@@ -44,7 +45,7 @@ export async function createOrderFromCart(params: {
   addressId: string;
   customerNotes?: string;
 }): Promise<Order> {
-  const provider = getPaymentProvider();
+  const mode = env.PAYMENT_MODE;
 
   const cart = await prisma.cart.findUnique({
     where: { userId: params.userId },
@@ -159,19 +160,27 @@ export async function createOrderFromCart(params: {
     return created;
   });
 
-  // Initiate payment order at the gateway (or mock) and persist the payment record.
-  const paymentOrder = await provider.createPaymentOrder({
-    orderNumber: order.orderNumber,
-    amountMinorUnits: toMinorUnits(totals.grandTotal),
-    customerEmail: user.email,
-    customerPhone: user.phone
-  });
+  // Create the payment record. "direct" mode = seller's own UPI QR (no gateway);
+  // "razorpay" = gateway order; "mock" = dev-only simulation.
+  let providerName = "direct-upi";
+  let providerOrderId: string | null = null;
+  if (mode === "razorpay" || (mode === "mock" && !isProduction())) {
+    const provider = getPaymentProvider();
+    const paymentOrder = await provider.createPaymentOrder({
+      orderNumber: order.orderNumber,
+      amountMinorUnits: toMinorUnits(totals.grandTotal),
+      customerEmail: user.email,
+      customerPhone: user.phone
+    });
+    providerName = paymentOrder.provider;
+    providerOrderId = paymentOrder.providerOrderId;
+  }
 
   await prisma.payment.create({
     data: {
       orderId: order.id,
-      provider: paymentOrder.provider,
-      providerOrderId: paymentOrder.providerOrderId,
+      provider: providerName,
+      providerOrderId,
       amount: new Prisma.Decimal(totals.grandTotal),
       currency: CURRENCY,
       status: "CREATED",
@@ -179,7 +188,7 @@ export async function createOrderFromCart(params: {
     }
   });
 
-  logger.info("Order created", { orderNumber: order.orderNumber, provider: paymentOrder.provider });
+  logger.info("Order created", { orderNumber: order.orderNumber, provider: providerName });
   return order;
 }
 
