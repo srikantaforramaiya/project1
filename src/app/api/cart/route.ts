@@ -3,6 +3,8 @@ import { getCartLines } from "@/services/cart.service";
 import { requireUser } from "@/lib/auth";
 import { handleApiError } from "@/lib/api-helpers";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const user = await requireUser();
