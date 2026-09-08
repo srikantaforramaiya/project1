@@ -10,8 +10,11 @@ export async function GET() {
     return NextResponse.json({ ok: true, db: "connected" });
   } catch (err) {
     const code = (err as { code?: string })?.code ?? "UNKNOWN";
+    const message = (err as { message?: string })?.message?.slice(0, 300) ?? String(err);
+    // Temporary diagnostics — REMOVE after the deployment issue is resolved.
+    console.error("[health] DB check failed:", message);
     return NextResponse.json(
-      { ok: false, db: "error", code, hint: code === "P1001" ? "Cannot reach database server — check host/sslmode" : code === "P1000" ? "Authentication failed — check username/password" : "Check DATABASE_URL and Render logs" },
+      { ok: false, db: "error", code, message, hint: "Check DATABASE_URL and Render logs" },
       { status: 500 }
     );
   }
