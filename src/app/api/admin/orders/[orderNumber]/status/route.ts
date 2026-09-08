@@ -5,7 +5,7 @@ import { updateOrderStatus } from "@/services/order-status.service";
 import { updateOrderStatusSchema } from "@/lib/validations";
 import { handleApiError, jsonError } from "@/lib/api-helpers";
 import { confirmPaymentPaid } from "@/services/payment.service";
-import { sendOrderConfirmation } from "@/services/order-email.service";
+import { sendOrderConfirmation, sendOrderCancelled } from "@/services/order-email.service";
 
 type Params = { params: { orderNumber: string } };
 
@@ -47,6 +47,11 @@ export async function PATCH(request: Request, { params }: Params) {
         paymentConfirmed = true;
       }
       await sendOrderConfirmation(order.orderNumber);
+    }
+
+    // Notify the customer when an admin cancels their order.
+    if (data.status === "CANCELLED") {
+      await sendOrderCancelled(order.orderNumber, data.notes || undefined);
     }
 
     return NextResponse.json({ ok: true, paymentConfirmed });

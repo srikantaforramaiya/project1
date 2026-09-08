@@ -59,8 +59,8 @@ export async function sendEmail(params: SendEmailParams): Promise<boolean> {
   }
 }
 
-export async function sendOrderConfirmationEmail(order: Order & { items: OrderItem[] }): Promise<boolean> {
-  const itemsHtml = order.items
+function renderItemsTable(order: Order & { items: OrderItem[] }): string {
+  return order.items
     .map(
       (i) => `<tr>
         <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;">${i.productNameSnapshot}</td>
@@ -70,6 +70,10 @@ export async function sendOrderConfirmationEmail(order: Order & { items: OrderIt
       </tr>`
     )
     .join("");
+}
+
+export async function sendOrderConfirmationEmail(order: Order & { items: OrderItem[] }): Promise<boolean> {
+  const itemsHtml = renderItemsTable(order);
 
   const html = `<!DOCTYPE html>
 <html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
@@ -110,6 +114,88 @@ export async function sendOrderConfirmationEmail(order: Order & { items: OrderIt
     subject: `Order Confirmed — #${order.orderNumber}`,
     html,
     template: "order-confirmation",
+    userId: order.userId,
+    orderId: order.id
+  });
+}
+
+export async function sendOrderPlacedEmail(order: Order & { items: OrderItem[] }): Promise<boolean> {
+  const itemsHtml = renderItemsTable(order);
+  const html = `<!DOCTYPE html>
+<html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
+  <div style="max-width:640px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+    <div style="background:#0B0E11;padding:20px 28px;">
+      <h1 style="color:#A3FF12;margin:0;font-size:22px;">${BUSINESS_NAME}</h1>
+    </div>
+    <div style="padding:28px;">
+      <h2 style="color:#111827;margin:0 0 8px;">Order Placed ✅</h2>
+      <p style="color:#374151;margin:0 0 16px;">Hi ${order.customerName}, we have received your order <strong>${order.orderNumber}</strong>. Please complete the payment to confirm it.</p>
+      <table style="width:100%;font-size:14px;color:#374151;border-collapse:collapse;">
+        <tr><td style="padding:4px 0;">Order date</td><td style="text-align:right;">${formatDateTimeIST(order.createdAt)}</td></tr>
+        <tr><td style="padding:4px 0;">Payment status</td><td style="text-align:right;">PENDING (${formatINR(order.grandTotal)})</td></tr>
+        <tr><td style="padding:4px 0;">Order status</td><td style="text-align:right;">${ORDER_STATUS_LABELS[order.orderStatus]}</td></tr>
+      </table>
+      ${itemsHtml}
+      <table style="width:100%;font-size:14px;color:#374151;margin-top:16px;">
+        <tr><td>Subtotal</td><td style="text-align:right;">${formatINR(order.subtotal)}</td></tr>
+        <tr><td>Delivery charge</td><td style="text-align:right;">${formatINR(order.deliveryCharge)}</td></tr>
+        <tr><td>Discount</td><td style="text-align:right;">-${formatINR(order.discountAmount)}</td></tr>
+        <tr style="font-weight:bold;"><td>Amount payable</td><td style="text-align:right;">${formatINR(order.grandTotal)}</td></tr>
+      </table>
+      <h3 style="color:#111827;margin:24px 0 8px;">Delivery address</h3>
+      <p style="color:#374151;font-size:14px;white-space:pre-line;margin:0;">${order.deliveryAddressSnapshot}</p>
+      <p style="margin-top:24px;"><a href="${env.NEXT_PUBLIC_APP_URL}/checkout/pay/${order.orderNumber}" style="background:#A3FF12;color:#0A0F00;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">Complete Payment</a></p>
+      <p style="color:#6b7280;font-size:13px;margin-top:28px;">Questions? Call us at ${BUSINESS_PHONE} or email ${BUSINESS_EMAIL}.<br/>${BUSINESS_ADDRESS}</p>
+    </div>
+  </div>
+</body></html>`;
+
+  return sendEmail({
+    to: order.customerEmail,
+    subject: `Order Placed — #${order.orderNumber}`,
+    html,
+    template: "order-placed",
+    userId: order.userId,
+    orderId: order.id
+  });
+}
+
+export async function sendOrderCancelledEmail(order: Order & { items: OrderItem[] }, reason?: string): Promise<boolean> {
+  const itemsHtml = renderItemsTable(order);
+  const html = `<!DOCTYPE html>
+<html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
+  <div style="max-width:640px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+    <div style="background:#0B0E11;padding:20px 28px;">
+      <h1 style="color:#A3FF12;margin:0;font-size:22px;">${BUSINESS_NAME}</h1>
+    </div>
+    <div style="padding:28px;">
+      <h2 style="color:#111827;margin:0 0 8px;">Order Cancelled</h2>
+      <p style="color:#374151;margin:0 0 16px;">Hi ${order.customerName}, your order <strong>${order.orderNumber}</strong> has been cancelled${reason ? ` for the following reason: <em>${reason}</em>` : ""}.</p>
+      ${order.paymentStatus === "PAID" ? `<p style="color:#374151;background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:12px;">Since this order was already paid (${formatINR(order.grandTotal)}), a refund will be processed to your original payment method shortly.</p>` : ""}
+      <table style="width:100%;font-size:14px;color:#374151;border-collapse:collapse;">
+        <tr><td style="padding:4px 0;">Order date</td><td style="text-align:right;">${formatDateTimeIST(order.createdAt)}</td></tr>
+        <tr><td style="padding:4px 0;">Cancelled at</td><td style="text-align:right;">${formatDateTimeIST(order.cancelledAt ?? new Date())}</td></tr>
+        <tr><td style="padding:4px 0;">Payment status</td><td style="text-align:right;">${order.paymentStatus}</td></tr>
+      </table>
+      ${itemsHtml}
+      <table style="width:100%;font-size:14px;color:#374151;margin-top:16px;">
+        <tr><td>Subtotal</td><td style="text-align:right;">${formatINR(order.subtotal)}</td></tr>
+        <tr><td>Delivery charge</td><td style="text-align:right;">${formatINR(order.deliveryCharge)}</td></tr>
+        <tr style="font-weight:bold;"><td>Order total</td><td style="text-align:right;">${formatINR(order.grandTotal)}</td></tr>
+      </table>
+      <h3 style="color:#111827;margin:24px 0 8px;">Delivery address</h3>
+      <p style="color:#374151;font-size:14px;white-space:pre-line;margin:0;">${order.deliveryAddressSnapshot}</p>
+      <p style="margin-top:24px;"><a href="${env.NEXT_PUBLIC_APP_URL}/account/orders" style="background:#A3FF12;color:#0A0F00;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">View My Orders</a></p>
+      <p style="color:#6b7280;font-size:13px;margin-top:28px;">Questions? Call us at ${BUSINESS_PHONE} or email ${BUSINESS_EMAIL}.<br/>${BUSINESS_ADDRESS}</p>
+    </div>
+  </div>
+</body></html>`;
+
+  return sendEmail({
+    to: order.customerEmail,
+    subject: `Order Cancelled — #${order.orderNumber}`,
+    html,
+    template: "order-cancelled",
     userId: order.userId,
     orderId: order.id
   });
