@@ -1,4 +1,4 @@
-PASS | 1.1 New customer can register | {"user":{"id":"cmtqqm8od0037z6bjcd2jiky5","name":"Journey Tester","email":"journey55123604@test.com","role":"CUSTOMER"}}
+PASS | 1.1 New customer can register | {"user":{"id":"cmts8n3fa00002f2wi91fgj0v","name":"Journey Tester","email":"journey45860397@test.com","role":"CUSTOMER"}}
 PASS | 1.2 Weak password / bad phone rejected
 PASS | 1.3 Duplicate email rejected
 PASS | 2.1 Logout works
