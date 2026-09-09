@@ -12,6 +12,79 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const { push } = useToast();
   const [pending, setPending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
+  const [otpStage, setOtpStage] = useState<{ email: string } | null>(null);
+  const [otp, setOtp] = useState("");
+  const [otpError, setOtpError] = useState<string | null>(null);
+
+  async function verifyOtp(e?: React.FormEvent) {
+    e?.preventDefault();
+    if (!otpStage) return;
+    setPending(true);
+    setOtpError(null);
+    const res = await fetch("/api/auth/verify-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: otpStage.email, otp })
+    });
+    const data = await res.json().catch(() => null);
+    setPending(false);
+    if (!res.ok) {
+      setOtpError(data?.error ?? "Verification failed. Please try again.");
+      return;
+    }
+    push("Email verified. Welcome!");
+    router.push(next);
+    router.refresh();
+  }
+
+  async function resendOtp() {
+    if (!otpStage) return;
+    setPending(true);
+    const res = await fetch("/api/auth/resend-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: otpStage.email })
+    });
+    setPending(false);
+    push(res.ok ? "A new OTP has been sent to your email." : "Could not resend the OTP right now.", res.ok ? "success" : "error");
+  }
+
+  if (otpStage) {
+    return (
+      <div className="card-elevated mx-auto w-full max-w-md p-8">
+        <h1 className="text-2xl font-bold">Verify your email</h1>
+        <p className="mt-1 text-sm text-text-secondary">
+          We sent a 6-digit code to <strong>{otpStage.email}</strong>. It is valid for 60 minutes.
+        </p>
+        <form onSubmit={verifyOtp} className="mt-6 space-y-4" noValidate>
+          <div>
+            <label htmlFor="otp" className="label">Verification code (OTP)</label>
+            <input
+              id="otp"
+              name="otp"
+              type="text"
+              inputMode="numeric"
+              pattern="\d{6}"
+              maxLength={6}
+              autoComplete="one-time-code"
+              placeholder="6-digit code"
+              className="input text-center text-lg tracking-[0.5em]"
+              required
+              value={otp}
+              onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+            />
+            {otpError && <p className="field-error">{otpError}</p>}
+          </div>
+          <button type="submit" className="btn-primary w-full" disabled={pending || otp.length !== 6}>
+            {pending ? "Verifying..." : "Verify & Continue"}
+          </button>
+          <button type="button" onClick={resendOtp} className="btn-secondary w-full" disabled={pending}>
+            Resend OTP
+          </button>
+        </form>
+      </div>
+    );
+  }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -29,6 +102,11 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
     if (!res.ok) {
       setErrors(data?.fields ?? {});
       push(data?.error ?? "Please check your details and try again.", "error");
+      return;
+    }
+    if (mode === "register" && data?.requiresVerification) {
+      setOtpStage({ email: data.email });
+      push(data.warning ?? `Verification code sent to ${data.email}.`, data.warning ? "error" : "success");
       return;
     }
     push(mode === "login" ? `Welcome back!` : "Account created. Welcome!");

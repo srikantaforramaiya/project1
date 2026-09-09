@@ -71,6 +71,7 @@ model User {
   statusHistory OrderStatusHistory[]
   auditLogs     AdminAuditLog[]
   resetTokens   PasswordResetToken[]
+  otps          EmailOtp[]
 
   @@index([phone])
 }
@@ -309,6 +310,20 @@ model PasswordResetToken {
   expiresAt DateTime
   usedAt    DateTime?
   createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model EmailOtp {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  codeHash   String    @unique
+  purpose    String    @default("registration")
+  expiresAt  DateTime
+  consumedAt DateTime?
+  attempts   Int       @default(0)
+  createdAt  DateTime  @default(now())
 
   @@index([userId])
 }

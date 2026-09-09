@@ -25,11 +25,68 @@ export async function loginUser(input: unknown) {
   if (!user || !user.isActive) {
     throw new AuthError("Invalid email or password.", 401);
   }
+  if (!user.emailVerified) {
+    throw new AuthError("Your email is not verified yet. Please enter the OTP we emailed you.", 403);
+  }
   const valid = await verifyPassword(data.password, user.passwordHash);
   if (!valid) {
     throw new AuthError("Invalid email or password.", 401);
   }
   await prisma.user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
+  return { id: user.id, name: user.name, email: user.email, role: user.role };
+}
+
+// ---------- Registration OTP ----------
+const OTP_TTL_MS = 60 * 60 * 1000; // 60 minutes
+const OTP_MAX_ATTEMPTS = 5;
+
+function hashCode(code: string): string {
+  return crypto.createHash("sha256").update(code).digest("hex");
+}
+
+/** Generate a 6-digit OTP valid for 60 minutes and email it to the user. Returns the raw code (for tests). */
+export async function createRegistrationOtp(userId: string, email: string, name: string): Promise<string> {
+  const { sendOtpEmail } = await import("@/services/email.service");
+  await prisma.emailOtp.updateMany({
+    where: { userId, consumedAt: null },
+    data: { consumedAt: new Date() }
+  });
+  const code = String(crypto.randomInt(100000, 1000000));
+  await prisma.emailOtp.create({
+    data: { userId, codeHash: hashCode(code), purpose: "registration", expiresAt: new Date(Date.now() + OTP_TTL_MS) }
+  });
+  await sendOtpEmail(email, name, code);
+  return code;
+}
+
+/** Resend the OTP for an unverified account. Never reveals whether the account exists. */
+export async function resendRegistrationOtp(email: string): Promise<void> {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user || user.emailVerified) return; // silently ignore to avoid account enumeration
+  await createRegistrationOtp(user.id, user.email, user.name);
+}
+
+/** Verify a registration OTP. Returns the verified user or null. */
+export async function verifyRegistrationOtp(
+  email: string,
+  code: string
+): Promise<{ id: string; name: string; email: string; role: string } | null> {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user || user.emailVerified) return null;
+  const otp = await prisma.emailOtp.findFirst({
+    where: { userId: user.id, consumedAt: null, purpose: "registration", expiresAt: { gt: new Date() } },
+    orderBy: { createdAt: "desc" }
+  });
+  if (!otp) throw new AuthError("No valid OTP found. Please request a new code.", 400);
+  if (otp.attempts >= OTP_MAX_ATTEMPTS) throw new AuthError("Too many incorrect attempts. Please request a new code.", 429);
+  if (hashCode(code) !== otp.codeHash) {
+    await prisma.emailOtp.update({ where: { id: otp.id }, data: { attempts: { increment: 1 } } });
+    throw new AuthError("Incorrect OTP. Please try again.", 400);
+  }
+  await prisma.$transaction([
+    prisma.emailOtp.update({ where: { id: otp.id }, data: { consumedAt: new Date() } }),
+    prisma.user.update({ where: { id: user.id }, data: { emailVerified: true } })
+  ]);
   return { id: user.id, name: user.name, email: user.email, role: user.role };
 }
 

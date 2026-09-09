@@ -191,8 +191,9 @@ export async function createOrderFromCart(params: {
   logger.info("Order created", { orderNumber: order.orderNumber, provider: providerName });
 
   // Fire the "order placed" email as soon as the order is saved (failure never blocks checkout).
-  const { sendOrderPlaced } = await import("@/services/order-email.service");
+  const { sendOrderPlaced, sendAdminOrderPlaced } = await import("@/services/order-email.service");
   await sendOrderPlaced(order.orderNumber);
+  await sendAdminOrderPlaced(order.orderNumber);
 
   return order;
 }

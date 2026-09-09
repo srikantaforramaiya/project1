@@ -236,6 +236,78 @@ export async function sendOrderOutForDeliveryEmail(order: Order & { items: Order
   });
 }
 
+export async function sendAdminOrderPlacedEmail(
+  order: Order & { items: OrderItem[] }
+): Promise<boolean> {
+  const itemsHtml = renderItemsTable(order);
+  const adminEmail = env.EMAIL_USER ?? BUSINESS_EMAIL;
+  const html = `<!DOCTYPE html>
+<html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
+  <div style="max-width:640px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+    <div style="background:#0B0E11;padding:20px 28px;">
+      <h1 style="color:#A3FF12;margin:0;font-size:22px;">${BUSINESS_NAME} — New Order</h1>
+    </div>
+    <div style="padding:28px;">
+      <h2 style="color:#111827;margin:0 0 8px;">New order placed 🔔</h2>
+      <p style="color:#374151;margin:0 0 16px;">Order <strong>${order.orderNumber}</strong> was just placed on the store.</p>
+      <h3 style="color:#111827;margin:20px 0 8px;">Customer details</h3>
+      <table style="width:100%;font-size:14px;color:#374151;border-collapse:collapse;">
+        <tr><td style="padding:4px 0;">Name</td><td style="text-align:right;">${order.customerName}</td></tr>
+        <tr><td style="padding:4px 0;">Email</td><td style="text-align:right;">${order.customerEmail}</td></tr>
+        <tr><td style="padding:4px 0;">Phone</td><td style="text-align:right;">${order.customerPhone}</td></tr>
+        ${order.customerNotes ? `<tr><td style="padding:4px 0;">Notes</td><td style="text-align:right;">${order.customerNotes}</td></tr>` : ""}
+      </table>
+      <h3 style="color:#111827;margin:20px 0 8px;">Order details</h3>
+      <table style="width:100%;font-size:14px;color:#374151;border-collapse:collapse;">
+        <tr><td style="padding:4px 0;">Order date</td><td style="text-align:right;">${formatDateTimeIST(order.createdAt)}</td></tr>
+        <tr><td style="padding:4px 0;">Payment status</td><td style="text-align:right;">${order.paymentStatus} (${formatINR(order.grandTotal)})</td></tr>
+        <tr><td style="padding:4px 0;">Order status</td><td style="text-align:right;">${ORDER_STATUS_LABELS[order.orderStatus]}</td></tr>
+      </table>
+      ${itemsHtml}
+      <table style="width:100%;font-size:14px;color:#374151;margin-top:16px;">
+        <tr><td>Subtotal</td><td style="text-align:right;">${formatINR(order.subtotal)}</td></tr>
+        <tr><td>Delivery charge</td><td style="text-align:right;">${formatINR(order.deliveryCharge)}</td></tr>
+        <tr><td>Discount</td><td style="text-align:right;">-${formatINR(order.discountAmount)}</td></tr>
+        <tr style="font-weight:bold;"><td>Order total</td><td style="text-align:right;">${formatINR(order.grandTotal)}</td></tr>
+      </table>
+      <h3 style="color:#111827;margin:20px 0 8px;">Delivery address</h3>
+      <p style="color:#374151;font-size:14px;white-space:pre-line;margin:0;">${order.deliveryAddressSnapshot}</p>
+      <p style="margin-top:24px;"><a href="${env.NEXT_PUBLIC_APP_URL}/admin/orders/${order.orderNumber}" style="background:#A3FF12;color:#0A0F00;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">Open in Admin</a></p>
+    </div>
+  </div>
+</body></html>`;
+
+  return sendEmail({
+    to: adminEmail,
+    subject: `New Order ${order.orderNumber} — ${order.customerName} (${formatINR(order.grandTotal)})`,
+    html,
+    template: "admin-order-placed",
+    userId: order.userId,
+    orderId: order.id
+  });
+}
+
+export async function sendOtpEmail(to: string, name: string, code: string): Promise<boolean> {
+  const html = `<!DOCTYPE html>
+<html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
+  <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid #e5e7eb;overflow:hidden;">
+    <div style="background:#0B0E11;padding:20px 28px;">
+      <h1 style="color:#A3FF12;margin:0;font-size:20px;">${BUSINESS_NAME}</h1>
+    </div>
+    <div style="padding:28px;">
+      <h2 style="color:#111827;margin:0 0 8px;">Verify your email</h2>
+      <p style="color:#374151;">Hi ${name}, use the verification code below to finish creating your account. It expires in <strong>60 minutes</strong>.</p>
+      <div style="text-align:center;margin:24px 0;">
+        <span style="display:inline-block;background:#0B0E11;color:#A3FF12;font-size:32px;letter-spacing:10px;font-weight:bold;padding:16px 28px;border-radius:10px;">${code}</span>
+      </div>
+      <p style="color:#6b7280;font-size:13px;">If you did not create an account with ${BUSINESS_NAME}, you can safely ignore this email.</p>
+      <p style="color:#6b7280;font-size:13px;margin-top:20px;">Questions? Call us at ${BUSINESS_PHONE} or email ${BUSINESS_EMAIL}.</p>
+    </div>
+  </div>
+</body></html>`;
+  return sendEmail({ to, subject: `Your ${BUSINESS_NAME} verification code: ${code}`, html, template: "registration-otp" });
+}
+
 export async function sendPasswordResetEmail(to: string, name: string, resetUrl: string): Promise<boolean> {
   const html = `<!DOCTYPE html>
 <html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
