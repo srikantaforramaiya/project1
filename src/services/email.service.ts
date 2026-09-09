@@ -308,16 +308,3 @@ export async function sendOtpEmail(to: string, name: string, code: string): Prom
   return sendEmail({ to, subject: `Your ${BUSINESS_NAME} verification code: ${code}`, html, template: "registration-otp" });
 }
 
-export async function sendPasswordResetEmail(to: string, name: string, resetUrl: string): Promise<boolean> {
-  const html = `<!DOCTYPE html>
-<html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
-  <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:12px;padding:28px;border:1px solid #e5e7eb;">
-    <h2 style="color:#111827;">Reset your ${BUSINESS_NAME} password</h2>
-    <p style="color:#374151;">Hi ${name}, we received a request to reset your password. This link expires in 1 hour.</p>
-    <p><a href="${resetUrl}" style="background:#A3FF12;color:#0A0F00;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">Reset Password</a></p>
-    <p style="color:#6b7280;font-size:13px;">If you did not request this, you can safely ignore this email.</p>
-  </div>
-</body></html>`;
-  return sendEmail({ to, subject: `Reset your ${BUSINESS_NAME} password`, html, template: "password-reset" });
-}
-

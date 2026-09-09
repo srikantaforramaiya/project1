@@ -33,22 +33,6 @@ export const forgotPasswordSchema = z.object({
   email: z.string().trim().toLowerCase().email("Please enter a valid email address.")
 });
 
-export const resetPasswordSchema = z
-  .object({
-    token: z.string().min(10),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters.")
-      .regex(/[A-Z]/, "Password must contain an uppercase letter.")
-      .regex(/[a-z]/, "Password must contain a lowercase letter.")
-      .regex(/\d/, "Password must contain a number."),
-    confirmPassword: z.string()
-  })
-  .refine((d) => d.password === d.confirmPassword, {
-    message: "Passwords do not match.",
-    path: ["confirmPassword"]
-  });
-
 export const profileUpdateSchema = z.object({
   name: z.string().trim().min(2, "Please enter your full name.").max(80),
   phone: z
