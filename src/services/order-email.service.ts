@@ -1,5 +1,5 @@
 import "server-only";
-import { sendOrderCancelledEmail, sendOrderConfirmationEmail, sendOrderPlacedEmail } from "@/services/email.service";
+import { sendOrderCancelledEmail, sendOrderConfirmationEmail, sendOrderOutForDeliveryEmail, sendOrderPlacedEmail } from "@/services/email.service";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import type { Order } from "@prisma/client";
@@ -29,6 +29,20 @@ export async function sendOrderPlaced(orderNumber: string): Promise<void> {
     await sendOrderPlacedEmail(order as Order & { items: (typeof order)["items"] });
   } catch (err) {
     logger.error("Order placed email failed", { orderNumber, error: String(err) });
+  }
+}
+
+/** Send "out for delivery" email when the order is dispatched. */
+export async function sendOrderOutForDelivery(orderNumber: string): Promise<void> {
+  try {
+    const order = await prisma.order.findUnique({
+      where: { orderNumber },
+      include: { items: true }
+    });
+    if (!order) return;
+    await sendOrderOutForDeliveryEmail(order as Order & { items: (typeof order)["items"] });
+  } catch (err) {
+    logger.error("Out for delivery email failed", { orderNumber, error: String(err) });
   }
 }
 

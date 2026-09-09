@@ -201,6 +201,41 @@ export async function sendOrderCancelledEmail(order: Order & { items: OrderItem[
   });
 }
 
+export async function sendOrderOutForDeliveryEmail(order: Order & { items: OrderItem[] }): Promise<boolean> {
+  const itemsHtml = renderItemsTable(order);
+  const html = `<!DOCTYPE html>
+<html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
+  <div style="max-width:640px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+    <div style="background:#0B0E11;padding:20px 28px;">
+      <h1 style="color:#A3FF12;margin:0;font-size:22px;">${BUSINESS_NAME}</h1>
+    </div>
+    <div style="padding:28px;">
+      <h2 style="color:#111827;margin:0 0 8px;">Out for Delivery 🛵</h2>
+      <p style="color:#374151;margin:0 0 16px;">Hi ${order.customerName}, good news! Your order <strong>${order.orderNumber}</strong> is on its way and will reach you shortly.</p>
+      <table style="width:100%;font-size:14px;color:#374151;border-collapse:collapse;">
+        <tr><td style="padding:4px 0;">Dispatched at</td><td style="text-align:right;">${formatDateTimeIST(order.dispatchedAt ?? new Date())}</td></tr>
+        <tr><td style="padding:4px 0;">Order status</td><td style="text-align:right;">${ORDER_STATUS_LABELS[order.orderStatus]}</td></tr>
+        <tr><td style="padding:4px 0;">Amount paid</td><td style="text-align:right;">${formatINR(order.grandTotal)}</td></tr>
+      </table>
+      ${itemsHtml}
+      <h3 style="color:#111827;margin:24px 0 8px;">Delivery address</h3>
+      <p style="color:#374151;font-size:14px;white-space:pre-line;margin:0;">${order.deliveryAddressSnapshot}</p>
+      <p style="margin-top:24px;"><a href="${env.NEXT_PUBLIC_APP_URL}/account/orders/${order.orderNumber}" style="background:#A3FF12;color:#0A0F00;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">Track Your Order</a></p>
+      <p style="color:#6b7280;font-size:13px;margin-top:28px;">Questions? Call us at ${BUSINESS_PHONE} or email ${BUSINESS_EMAIL}.<br/>${BUSINESS_ADDRESS}</p>
+    </div>
+  </div>
+</body></html>`;
+
+  return sendEmail({
+    to: order.customerEmail,
+    subject: `Out for Delivery — #${order.orderNumber}`,
+    html,
+    template: "order-out-for-delivery",
+    userId: order.userId,
+    orderId: order.id
+  });
+}
+
 export async function sendPasswordResetEmail(to: string, name: string, resetUrl: string): Promise<boolean> {
   const html = `<!DOCTYPE html>
 <html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
