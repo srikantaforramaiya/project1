@@ -44,13 +44,19 @@ function hashCode(code: string): string {
   return crypto.createHash("sha256").update(code).digest("hex");
 }
 
+/** Cryptographically random 6-digit code (100000-999999). Uses randomBytes so it works on all Node versions. */
+function randomOtp(): string {
+  const num = crypto.randomBytes(4).readUInt32BE() % 900000;
+  return String(100000 + num);
+}
+
 async function issueOtp(userId: string, email: string, name: string, purpose: string): Promise<string> {
   const { sendOtpEmail } = await import("@/services/email.service");
   await prisma.emailOtp.updateMany({
     where: { userId, purpose, consumedAt: null },
     data: { consumedAt: new Date() }
   });
-  const code = String(crypto.randomInt(100000, 1000000));
+  const code = randomOtp();
   await prisma.emailOtp.create({
     data: { userId, codeHash: hashCode(code), purpose, expiresAt: new Date(Date.now() + OTP_TTL_MS) }
   });
