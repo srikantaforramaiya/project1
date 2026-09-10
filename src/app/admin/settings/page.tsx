@@ -3,6 +3,10 @@ import { STORE_CONFIG, BUSINESS_NAME, BUSINESS_ADDRESS, BUSINESS_PHONE, BUSINESS
 import { isEmailConfigured } from "@/services/email.service";
 
 export default function AdminSettingsPage() {
+  const emailConfigured = isEmailConfigured();
+  const emailBadge = emailConfigured
+    ? "Configured ✓"
+    : "MISSING — set EMAIL_HOST / EMAIL_USER / EMAIL_PASSWORD on Render (OTP & order emails will NOT send until then)";
   const sections: { title: string; rows: { label: string; value: string }[] }[] = [
     {
       title: "General",
@@ -33,10 +37,11 @@ export default function AdminSettingsPage() {
       ]
     },
     {
-      title: "Email",
+      title: "Email (srikantak1@gmail.com)",
       rows: [
-        { label: "SMTP Provider", value: isEmailConfigured() ? "Configured ✓" : "Not configured (emails are logged but not sent)" },
-        { label: "From Address", value: env.EMAIL_FROM }
+        { label: "SMTP Status", value: emailBadge },
+        { label: "Sender (EMAIL_USER)", value: env.EMAIL_USER || "Not set" },
+        { label: "From Address (EMAIL_FROM)", value: env.EMAIL_FROM || "Not set" }
       ]
     }
   ];
