@@ -112,6 +112,9 @@ export async function resetPasswordWithOtp(
     prisma.emailOtp.update({ where: { id: otp.id }, data: { consumedAt: new Date() } }),
     prisma.user.update({ where: { id: user.id }, data: { passwordHash } })
   ]);
+  // Fire the password-changed confirmation email (failure never blocks the reset).
+  const { sendPasswordChangedEmail } = await import("@/services/email.service");
+  await sendPasswordChangedEmail(user.email, user.name);
   return { id: user.id, email: user.email };
 }
 
