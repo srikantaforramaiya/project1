@@ -319,6 +319,7 @@ model EmailOtp {
   userId     String
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   codeHash   String    @unique
+  cipher     String?
   purpose    String    @default("registration")
   expiresAt  DateTime
   consumedAt DateTime?
