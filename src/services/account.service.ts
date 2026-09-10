@@ -69,10 +69,23 @@ export async function createRegistrationOtp(userId: string, email: string, name:
   return issueOtp(userId, email, name, "registration");
 }
 
+/**
+ * Validates that an email belongs to an existing customer. Returns true only when the
+ * account exists and is active. Used to gate actions like password reset — when false,
+ * callers MUST do nothing (no OTP, no email, neutral response) to avoid account enumeration.
+ */
+export async function isKnownCustomer(email: string): Promise<boolean> {
+  const user = await prisma.user.findUnique({ where: { email, isActive: true } });
+  return user !== null;
+}
+
 /** Issue a password-reset OTP. Returns null if the account does not exist (callers never reveal that). */
 export async function createPasswordResetOtp(email: string): Promise<string | null> {
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || !user.isActive) return null;
+  if (!user || !user.isActive) {
+    // Not in the customer list (or inactive): do nothing — no OTP, no email.
+    return null;
+  }
   return issueOtp(user.id, user.email, user.name, "password-reset");
 }
 
