@@ -3,6 +3,39 @@
 const BASE = "http://localhost:3000";
 const PASS = "9790719925:ReportPass1!";
 const fs = require("fs");
+const crypto = require("crypto");
+
+// Registration now requires email-OTP verification. The plaintext OTP is NOT stored
+// in the DB (only a SHA-256 hash + an AES-256-GCM cipher). The test recovers the code
+// by decrypting the cipher exactly as src/services/account.service.ts does, using the
+// same AUTH_SECRET-derived key, so it can drive the real /api/auth/verify-otp flow.
+function loadAuthSecret() {
+  const txt = fs.readFileSync(".env", "utf8");
+  const m = txt.match(/^AUTH_SECRET=(.+)$/m);
+  if (!m) throw new Error("AUTH_SECRET not found in .env");
+  return m[1].trim().replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1");
+}
+
+function decryptOtpCipher(cipher) {
+  const key = crypto.createHash("sha256").update(loadAuthSecret()).digest();
+  const [ivHex, tagHex, ctHex] = cipher.split(":");
+  const d = crypto.createDecipheriv("aes-256-gcm", key, Buffer.from(ivHex, "hex"));
+  d.setAuthTag(Buffer.from(tagHex, "hex"));
+  return Buffer.concat([d.update(Buffer.from(ctHex, "hex")), d.final()]).toString("utf8");
+}
+
+async function fetchRegistrationOtp(email) {
+  const { PrismaClient } = require("@prisma/client");
+  const client = new PrismaClient();
+  const user = await client.user.findUnique({ where: { email } });
+  if (!user) { await client.$disconnect(); return null; }
+  const otp = await client.emailOtp.findFirst({
+    where: { userId: user.id, purpose: "registration", consumedAt: null, expiresAt: { gt: new Date() } },
+    orderBy: { createdAt: "desc" }
+  });
+  await client.$disconnect();
+  return otp && otp.cipher ? decryptOtpCipher(otp.cipher) : null;
+}
 
 function makeClient() {
   let cookie = "";
@@ -38,13 +71,18 @@ function check(name, cond, detail) {
 async function main() {
   const stamp = Date.now().toString().slice(-8);
 
-  // ── 1. Registration ──
+  // ── 1. Registration (now requires email-OTP verification) ──
   const nu = makeClient();
+  const regEmail = `journey${stamp}@test.com`;
   const reg = await nu.req("POST", "/api/auth/register", {
-    name: "Journey Tester", email: `journey${stamp}@test.com`, phone: `98${stamp}`,
+    name: "Journey Tester", email: regEmail, phone: `98${stamp}`,
     password: PASS, confirmPassword: PASS
   });
-  check("1.1 New customer can register", reg.status === 200, JSON.stringify(reg.data));
+  check("1.1 New customer can register (requires verification)", reg.status === 200 && reg.data.requiresVerification === true && reg.data.email === regEmail, JSON.stringify(reg.data));
+
+  // Recover the emailed OTP (stored encrypted in EmailOtp.cipher) and drive the real verify flow.
+  const otp = await fetchRegistrationOtp(regEmail);
+  check("1.1a Registration OTP issued and recoverable", typeof otp === "string" && /^\d{6}$/.test(otp));
 
   const regBad = await nu.req("POST", "/api/auth/register", {
     name: "X", email: `bad${stamp}@test.com`, phone: "123", password: "weak", confirmPassword: "other"
@@ -56,6 +94,17 @@ async function main() {
   });
   check("1.3 Duplicate email rejected", regDup.status === 409);
 
+  // ── 1b. OTP verification ──
+  const wrongOtp = await nu.req("POST", "/api/auth/verify-otp", { email: regEmail, otp: "000000" });
+  check("1.4 Wrong OTP rejected, email stays unverified", wrongOtp.status === 400 || wrongOtp.status === 401);
+  const notYetLogic = await makeClient().req("POST", "/api/auth/login", { email: regEmail, password: PASS });
+  check("1.5 Login blocked until email verified", notYetLogic.status === 401 || notYetLogic.status === 403);
+
+  const verify = await nu.req("POST", "/api/auth/verify-otp", { email: regEmail, otp });
+  check("1.6 Correct OTP verifies email (session created)", verify.status === 200);
+  const sess = await nu.req("GET", "/api/auth/session");
+  check("1.7 Session active after email verification", sess.status === 200 && sess.data.email === regEmail);
+
   // ── 2. Logout / Login ──
   const lo = await nu.req("POST", "/api/auth/logout");
   check("2.1 Logout works", lo.status === 200);
@@ -63,9 +112,9 @@ async function main() {
   check("2.2 Session cleared after logout", afterLogout.status === 401);
 
   const c = makeClient();
-  const badLogin = await c.req("POST", "/api/auth/login", { email: `journey${stamp}@test.com`, password: "WrongPass1!" });
+  const badLogin = await c.req("POST", "/api/auth/login", { email: regEmail, password: "WrongPass1!" });
   check("2.3 Invalid login rejected", badLogin.status === 401);
-  const login = await c.req("POST", "/api/auth/login", { email: `journey${stamp}@test.com`, password: PASS });
+  const login = await c.req("POST", "/api/auth/login", { email: regEmail, password: PASS });
   check("2.4 Login with correct password", login.status === 200);
 
   // ── 3. Address management ──

@@ -1,6 +1,11 @@
-PASS | 1.1 New customer can register | {"user":{"id":"cmts8n3fa00002f2wi91fgj0v","name":"Journey Tester","email":"journey45860397@test.com","role":"CUSTOMER"}}
+PASS | 1.1 New customer can register (requires verification) | {"requiresVerification":true,"email":"journey83600032@test.com"}
+PASS | 1.1a Registration OTP issued and recoverable
 PASS | 1.2 Weak password / bad phone rejected
 PASS | 1.3 Duplicate email rejected
+PASS | 1.4 Wrong OTP rejected, email stays unverified
+PASS | 1.5 Login blocked until email verified
+PASS | 1.6 Correct OTP verifies email (session created)
+PASS | 1.7 Session active after email verification
 PASS | 2.1 Logout works
 PASS | 2.2 Session cleared after logout
 PASS | 2.3 Invalid login rejected
@@ -38,4 +43,4 @@ PASS | 7.3 Profile update works
 PASS | 8.1 Anonymous checkout redirects to login
 PASS | 8.2 Anonymous admin redirects to login
 
-=== 39 passed / 39 total ===
+=== 44 passed / 44 total ===

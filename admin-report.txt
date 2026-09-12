@@ -29,6 +29,6 @@ PASS | A7.5 Custom report CSV export works
 PASS | A7.6 CSV export blocked for anonymous
 PASS | A8.1 Settings renders, DB credentials never shown
 PASS | A8.2 Audit logs render with product actions
-PASS | A8.3 Audit entries persisted in DB | count=22
+PASS | A8.3 Audit entries persisted in DB | count=33
 
 === 32 passed / 32 total ===
