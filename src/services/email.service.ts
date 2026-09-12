@@ -53,8 +53,9 @@ export async function sendEmail(params: SendEmailParams): Promise<boolean> {
     await prisma.emailLog.update({ where: { id: log.id }, data: { status: "SENT", providerMessageId: info.messageId, sentAt: new Date() } });
     return true;
   } catch (err) {
-    logger.error("Email send failed", { to: params.to, template: params.template });
-    await prisma.emailLog.update({ where: { id: log.id }, data: { status: "FAILED", errorMessage: "Delivery failed" } });
+    const detail = err instanceof Error ? err.message : String(err);
+    logger.error("Email send failed", { to: params.to, template: params.template, error: detail });
+    await prisma.emailLog.update({ where: { id: log.id }, data: { status: "FAILED", errorMessage: `Delivery failed: ${detail}` } });
     return false;
   }
 }
