@@ -4,8 +4,6 @@ import { slugify } from "@/lib/api-helpers";
 import { hashPassword, verifyPassword } from "@/lib/auth";
 import { registerSchema, loginSchema, profileUpdateSchema, addressSchema } from "@/lib/validations";
 import { AuthError } from "@/lib/auth";
-import { env } from "@/lib/env";
-import crypto from "crypto";
 
 export async function registerCustomer(input: unknown) {
   const data = registerSchema.parse(input);
@@ -26,169 +24,11 @@ export async function loginUser(input: unknown) {
   if (!user || !user.isActive) {
     throw new AuthError("Invalid email or password.", 401);
   }
-  if (!user.emailVerified) {
-    throw new AuthError("Your email is not verified yet. Please enter the OTP we emailed you.", 403);
-  }
   const valid = await verifyPassword(data.password, user.passwordHash);
   if (!valid) {
     throw new AuthError("Invalid email or password.", 401);
   }
   await prisma.user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
-  return { id: user.id, name: user.name, email: user.email, role: user.role };
-}
-
-// ---------- OTP engine ----------
-const OTP_TTL_MS = 60 * 60 * 1000; // 60 minutes
-const OTP_MAX_ATTEMPTS = 5;
-
-function hashCode(code: string): string {
-  return crypto.createHash("sha256").update(code).digest("hex");
-}
-
-/** Encrypt the OTP with an AES-256-GCM key derived from AUTH_SECRET so a code can be re-sent later. */
-function encryptOtp(code: string): string {
-  const key = crypto.createHash("sha256").update(env.AUTH_SECRET).digest();
-  const iv = crypto.randomBytes(12);
-  const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
-  const ct = Buffer.concat([cipher.update(code, "utf8"), cipher.final()]);
-  return `${iv.toString("hex")}:${cipher.getAuthTag().toString("hex")}:${ct.toString("hex")}`;
-}
-
-function decryptOtp(payload: string): string | null {
-  try {
-    const key = crypto.createHash("sha256").update(env.AUTH_SECRET).digest();
-    const [ivHex, tagHex, ctHex] = payload.split(":");
-    const decipher = crypto.createDecipheriv("aes-256-gcm", key, Buffer.from(ivHex, "hex"));
-    decipher.setAuthTag(Buffer.from(tagHex, "hex"));
-    return Buffer.concat([decipher.update(Buffer.from(ctHex, "hex")), decipher.final()]).toString("utf8");
-  } catch {
-    return null;
-  }
-}
-
-/** Cryptographically random 6-digit code (100000-999999). Uses randomBytes so it works on all Node versions. */
-function randomOtp(): string {
-  const num = crypto.randomBytes(4).readUInt32BE() % 900000;
-  return String(100000 + num);
-}
-
-async function issueOtp(userId: string, email: string, name: string, purpose: string): Promise<string> {
-  const { sendOtpEmail } = await import("@/services/email.service");
-  await prisma.emailOtp.updateMany({
-    where: { userId, purpose, consumedAt: null },
-    data: { consumedAt: new Date() }
-  });
-  const code = randomOtp();
-  await prisma.emailOtp.create({
-    data: {
-      userId,
-      codeHash: hashCode(code),
-      cipher: encryptOtp(code),
-      purpose,
-      expiresAt: new Date(Date.now() + OTP_TTL_MS)
-    }
-  });
-  await sendOtpEmail(email, name, code);
-  return code;
-}
-
-/** Generate a 6-digit OTP valid for 60 minutes and email it to the user. Returns the raw code (for tests). */
-export async function createRegistrationOtp(userId: string, email: string, name: string): Promise<string> {
-  return issueOtp(userId, email, name, "registration");
-}
-
-/**
- * Validates that an email belongs to an existing customer. Returns true only when the
- * account exists and is active. Used to gate actions like password reset — when false,
- * callers MUST do nothing (no OTP, no email, neutral response) to avoid account enumeration.
- */
-export async function isKnownCustomer(email: string): Promise<boolean> {
-  const user = await prisma.user.findUnique({ where: { email, isActive: true } });
-  return user !== null;
-}
-
-/** Issue a password-reset OTP (or re-send the still-valid one within 60 minutes). Returns null if the account does not exist. */
-export async function createPasswordResetOtp(email: string): Promise<string | null> {
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || !user.isActive) {
-    // Not in the customer list (or inactive): do nothing — no OTP, no email.
-    return null;
-  }
-
-  // If an un-expired, un-consumed password-reset OTP already exists, RESEND the SAME code.
-  const existing = await prisma.emailOtp.findFirst({
-    where: { userId: user.id, purpose: "password-reset", consumedAt: null, expiresAt: { gt: new Date() } },
-    orderBy: { createdAt: "desc" }
-  });
-  if (existing?.cipher) {
-    const code = decryptOtp(existing.cipher);
-    if (code) {
-      const { sendOtpEmail } = await import("@/services/email.service");
-      await sendOtpEmail(user.email, user.name, code);
-      return code;
-    }
-  }
-
-  return issueOtp(user.id, user.email, user.name, "password-reset");
-}
-
-/** Consume a password-reset OTP and set the new password. Returns the user or null on any failure. */
-export async function resetPasswordWithOtp(
-  email: string,
-  code: string,
-  newPassword: string
-): Promise<{ id: string; email: string } | null> {
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || !user.isActive) return null;
-  const otp = await prisma.emailOtp.findFirst({
-    where: { userId: user.id, purpose: "password-reset", consumedAt: null, expiresAt: { gt: new Date() } },
-    orderBy: { createdAt: "desc" }
-  });
-  if (!otp) throw new AuthError("No valid OTP found. Please request a new code.", 400);
-  if (otp.attempts >= OTP_MAX_ATTEMPTS) throw new AuthError("Too many incorrect attempts. Please request a new code.", 429);
-  if (hashCode(code) !== otp.codeHash) {
-    await prisma.emailOtp.update({ where: { id: otp.id }, data: { attempts: { increment: 1 } } });
-    throw new AuthError("Incorrect OTP. Please try again.", 400);
-  }
-  const passwordHash = await hashPassword(newPassword);
-  await prisma.$transaction([
-    prisma.emailOtp.update({ where: { id: otp.id }, data: { consumedAt: new Date() } }),
-    prisma.user.update({ where: { id: user.id }, data: { passwordHash } })
-  ]);
-  // Fire the password-changed confirmation email (failure never blocks the reset).
-  const { sendPasswordChangedEmail } = await import("@/services/email.service");
-  await sendPasswordChangedEmail(user.email, user.name);
-  return { id: user.id, email: user.email };
-}
-
-/** Resend the OTP for an unverified account. Never reveals whether the account exists. */
-export async function resendRegistrationOtp(email: string): Promise<void> {
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || user.emailVerified) return; // silently ignore to avoid account enumeration
-  await createRegistrationOtp(user.id, user.email, user.name);
-}
-
-/** Verify a registration OTP. Returns the verified user or null. */
-export async function verifyRegistrationOtp(
-  email: string,
-  code: string
-): Promise<{ id: string; name: string; email: string; role: string } | null> {
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || user.emailVerified) return null;
-  const otp = await prisma.emailOtp.findFirst({
-    where: { userId: user.id, consumedAt: null, purpose: "registration", expiresAt: { gt: new Date() } },
-    orderBy: { createdAt: "desc" }
-  });
-  if (!otp) throw new AuthError("No valid OTP found. Please request a new code.", 400);
-  if (otp.attempts >= OTP_MAX_ATTEMPTS) throw new AuthError("Too many incorrect attempts. Please request a new code.", 429);
-  if (hashCode(code) !== otp.codeHash) {
-    await prisma.emailOtp.update({ where: { id: otp.id }, data: { attempts: { increment: 1 } } });
-    throw new AuthError("Incorrect OTP. Please try again.", 400);
-  }
-  await prisma.$transaction([
-    prisma.emailOtp.update({ where: { id: otp.id }, data: { consumedAt: new Date() } }),
-    prisma.user.update({ where: { id: user.id }, data: { emailVerified: true } })
-  ]);
   return { id: user.id, name: user.name, email: user.email, role: user.role };
 }
 

@@ -288,45 +288,5 @@ export async function sendAdminOrderPlacedEmail(
   });
 }
 
-export async function sendOtpEmail(to: string, name: string, code: string): Promise<boolean> {
-  const html = `<!DOCTYPE html>
-<html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
-  <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid #e5e7eb;overflow:hidden;">
-    <div style="background:#0B0E11;padding:20px 28px;">
-      <h1 style="color:#A3FF12;margin:0;font-size:20px;">${BUSINESS_NAME}</h1>
-    </div>
-    <div style="padding:28px;">
-      <h2 style="color:#111827;margin:0 0 8px;">Verify your email</h2>
-      <p style="color:#374151;">Hi ${name}, use the verification code below to finish creating your account. It expires in <strong>60 minutes</strong>.</p>
-      <div style="text-align:center;margin:24px 0;">
-        <span style="display:inline-block;background:#0B0E11;color:#A3FF12;font-size:32px;letter-spacing:10px;font-weight:bold;padding:16px 28px;border-radius:10px;">${code}</span>
-      </div>
-      <p style="color:#6b7280;font-size:13px;">If you did not create an account with ${BUSINESS_NAME}, you can safely ignore this email.</p>
-      <p style="color:#6b7280;font-size:13px;margin-top:20px;">Questions? Call us at ${BUSINESS_PHONE} or email ${BUSINESS_EMAIL}.</p>
-    </div>
-  </div>
-</body></html>`;
-  return sendEmail({ to, subject: `Your ${BUSINESS_NAME} verification code: ${code}`, html, template: "registration-otp" });
-}
 
-/** Sends a confirmation email to the customer when their password has been changed. */
-export async function sendPasswordChangedEmail(to: string, name: string): Promise<boolean> {
-  const html = `<!DOCTYPE html>
-<html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
-  <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid #e5e7eb;overflow:hidden;">
-    <div style="background:#0B0E11;padding:20px 28px;">
-      <h1 style="color:#A3FF12;margin:0;font-size:20px;">${BUSINESS_NAME}</h1>
-    </div>
-    <div style="padding:28px;">
-      <h2 style="color:#111827;margin:0 0 8px;">Your password has been changed</h2>
-      <p style="color:#374151;">Hi ${name}, the password for your ${BUSINESS_NAME} account was successfully updated.</p>
-      <p style="color:#374151;">If this was you, no further action is needed — you can log in with your new password.</p>
-      <p style="color:#c2410c;background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:12px;">If you did NOT make this change, please contact us immediately so we can secure your account.</p>
-      <p style="margin-top:24px;"><a href="${env.NEXT_PUBLIC_APP_URL}/auth/login" style="background:#A3FF12;color:#0A0F00;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">Log In</a></p>
-      <p style="color:#6b7280;font-size:13px;margin-top:20px;">Questions? Call us at ${BUSINESS_PHONE} or email ${BUSINESS_EMAIL}.</p>
-    </div>
-  </div>
-</body></html>`;
-  return sendEmail({ to, subject: `Your ${BUSINESS_NAME} password was changed`, html, template: "password-changed" });
-}
 

@@ -59,7 +59,6 @@ model User {
   phone         String
   passwordHash  String
   role          Role      @default(CUSTOMER)
-  emailVerified Boolean   @default(false)
   isActive      Boolean   @default(true)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -71,7 +70,6 @@ model User {
   statusHistory OrderStatusHistory[]
   auditLogs     AdminAuditLog[]
   resetTokens   PasswordResetToken[]
-  otps          EmailOtp[]
 
   @@index([phone])
 }
@@ -310,21 +308,6 @@ model PasswordResetToken {
   expiresAt DateTime
   usedAt    DateTime?
   createdAt DateTime  @default(now())
-
-  @@index([userId])
-}
-
-model EmailOtp {
-  id         String    @id @default(cuid())
-  userId     String
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  codeHash   String    @unique
-  cipher     String?
-  purpose    String    @default("registration")
-  expiresAt  DateTime
-  consumedAt DateTime?
-  attempts   Int       @default(0)
-  createdAt  DateTime  @default(now())
 
   @@index([userId])
 }

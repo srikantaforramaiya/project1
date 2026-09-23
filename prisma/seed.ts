@@ -22,8 +22,7 @@ async function main() {
       email: adminEmail,
       phone: "9876543210",
       passwordHash: adminHash,
-      role: "ADMIN",
-      emailVerified: true
+      role: "ADMIN"
     }
   });
   console.log(`Admin ready: ${adminEmail}`);
@@ -38,7 +37,7 @@ async function main() {
     const u = await prisma.user.upsert({
       where: { email: c.email },
       update: {},
-      create: { ...c, passwordHash: customerHash, role: "CUSTOMER", emailVerified: true }
+      create: { ...c, passwordHash: customerHash, role: "CUSTOMER" }
     });
     const address = await prisma.address.findFirst({ where: { userId: u.id } });
     if (!address) {

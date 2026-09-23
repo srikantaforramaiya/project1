@@ -29,10 +29,6 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Please enter your password.")
 });
 
-export const forgotPasswordSchema = z.object({
-  email: z.string().trim().toLowerCase().email("Please enter a valid email address.")
-});
-
 export const profileUpdateSchema = z.object({
   name: z.string().trim().min(2, "Please enter your full name.").max(80),
   phone: z
