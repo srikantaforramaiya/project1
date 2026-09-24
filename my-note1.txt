@@ -1,0 +1,14 @@
+
+
+srikantak@yahoo.com / Abcd!@#$
+
+
+Admin ID (email)	Name	Role	Password
+admin@neonbites.test	Store Admin	ADMIN	ChangeMe!123
+srikantak1@gmail.com	Store Admin	ADMIN	ChangeMe!123
+
+
+npm run dev
+
+http://localhost:3000
+
