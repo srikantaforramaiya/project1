@@ -1,0 +1,47 @@
+# Render.com Blueprint — Neon Bites
+# Deploy: 1) push repo to GitHub, 2) Render → New → Blueprint → select repo,
+#         3) set DATABASE_URL, AUTH_SECRET, NEXT_PUBLIC_APP_URL, NEXTAUTH_URL, EMAIL_PASSWORD.
+services:
+  - type: web
+    name: neon-bites
+    runtime: node
+    plan: free
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    # Syncs the Prisma schema to the DB (idempotent) and ensures the admin + menu exist.
+    # NOTE: `prisma db push` may prompt in some cases; run `npm run prisma:push` once from
+    # the Render Shell if the deploy skips it, then `npm run prisma:prune` to strip other users.
+    preDeployCommand: npm run prisma:push -- --skip-generate && npm run prisma:seed
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PAYMENT_MODE
+        value: direct
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_SECURE
+        value: "false"
+      - key: EMAIL_USER
+        value: srikantak1@gmail.com
+      - key: EMAIL_FROM
+        value: "Neon Bites <srikantak1@gmail.com>"
+      - key: SEED_ADMIN_EMAIL
+        value: srikantak1@gmail.com
+      - key: SEED_ADMIN_PASSWORD
+        value: Oic1903!
+      - key: KEEP_USER_EMAIL
+        value: srikantak@yahoo.com
+      # Secrets — set these in the Render dashboard, do NOT commit values.
+      - key: DATABASE_URL
+        sync: false
+      - key: AUTH_SECRET
+        sync: false
+      - key: NEXT_PUBLIC_APP_URL
+        sync: false
+      - key: NEXTAUTH_URL
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false

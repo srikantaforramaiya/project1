@@ -74,6 +74,11 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           <input id="password" name="password" type="password" autoComplete={isRegister ? "new-password" : "current-password"} className="input" required aria-describedby="password-error" />
           {errors.password && <p id="password-error" className="field-error">{errors.password[0]}</p>}
         </div>
+        {!isRegister && (
+          <div className="-mt-2 text-right">
+            <Link href="/auth/forgot-password" className="text-xs text-text-secondary hover:text-primary">Forgot password?</Link>
+          </div>
+        )}
         {isRegister && (
           <div>
             <label htmlFor="confirmPassword" className="label">Confirm Password</label>

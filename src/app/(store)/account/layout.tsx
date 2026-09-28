@@ -1,5 +1,5 @@
 import { requireUser } from "@/lib/auth";
-import { User, MapPin, Package, LayoutDashboard, LogOut } from "lucide-react";
+import { User, MapPin, Package, LayoutDashboard, LogOut, KeyRound } from "lucide-react";
 import { LogoutButton } from "@/components/layout/LogoutButton";
 import Link from "next/link";
 
@@ -9,7 +9,8 @@ export default async function AccountLayout({ children }: { children: React.Reac
     { href: "/account", label: "Overview", icon: LayoutDashboard },
     { href: "/account/profile", label: "Profile", icon: User },
     { href: "/account/addresses", label: "Addresses", icon: MapPin },
-    { href: "/account/orders", label: "My Orders", icon: Package }
+    { href: "/account/orders", label: "My Orders", icon: Package },
+    { href: "/account/password", label: "Security", icon: KeyRound }
   ];
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">

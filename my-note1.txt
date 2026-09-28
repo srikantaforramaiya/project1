@@ -12,3 +12,25 @@ npm run dev
 
 http://localhost:3000
 
+
+
+git clone https://github.com/srikantaforramaiya/project1.git
+
+
+=======================
+
+
+### ⚠️ Things to set manually in Render (secrets, marked `sync: false`)
+
+- `DATABASE_URL` (CockroachDB URL; keep `sslmode=verify-full` in production)
+- `AUTH_SECRET` (long random string, ≥16 chars)
+- `NEXT_PUBLIC_APP_URL` / `NEXTAUTH_URL` (`https://<your-app>.onrender.com`)
+- `EMAIL_PASSWORD` (Gmail app password)
+
+### Note on the database
+
+There is __no checked-in `prisma/migrations` folder__ (only a single `migration.sql`), so the Render pre-deploy uses `prisma db push` (idempotent) to sync your schema to CockroachDB rather than `migrate deploy`. If you prefer migrations, I can convert `migration.sql` into a proper `prisma/migrations` folder.
+
+I verified the project passes `npm run typecheck` (empty error output) and cleaned up all temporary files I created during the work.
+
+

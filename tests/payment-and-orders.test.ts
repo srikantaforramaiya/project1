@@ -36,11 +36,9 @@ describe("mock payment provider", () => {
 });
 
 describe("order status transitions", () => {
-  it("follows the happy path", () => {
-    expect(ALLOWED_TRANSITIONS.PAYMENT_RECEIVED).toContain("CONFIRMED");
-    expect(ALLOWED_TRANSITIONS.CONFIRMED).toContain("PREPARING");
-    expect(ALLOWED_TRANSITIONS.PREPARING).toContain("READY");
-    expect(ALLOWED_TRANSITIONS.READY).toContain("OUT_FOR_DELIVERY");
+  it("follows the happy path (simplified 3-stage admin flow)", () => {
+    expect(ALLOWED_TRANSITIONS.PENDING_PAYMENT).toContain("PAYMENT_RECEIVED");
+    expect(ALLOWED_TRANSITIONS.PAYMENT_RECEIVED).toContain("OUT_FOR_DELIVERY");
     expect(ALLOWED_TRANSITIONS.OUT_FOR_DELIVERY).toContain("DELIVERED");
   });
 

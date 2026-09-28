@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import { ORDER_STATUS_LABELS } from "@/lib/store-config";
 import { useToast } from "@/components/ui/toast";
 
-/** Allowed next statuses (mirror of the server transition map, for UX only). */
+/** Allowed next statuses (mirror of the server transition map, for UX only).
+ *  Admin flow is a simplified 3-stage journey: Payment Received → Out for Delivery → Delivered. */
 const NEXT: Record<string, string[]> = {
   PENDING_PAYMENT: ["PAYMENT_RECEIVED", "CANCELLED"],
-  PAYMENT_RECEIVED: ["CONFIRMED", "CANCELLED", "REFUND_PENDING"],
-  CONFIRMED: ["PREPARING", "CANCELLED", "REFUND_PENDING"],
-  PREPARING: ["READY", "CANCELLED", "REFUND_PENDING"],
+  PAYMENT_RECEIVED: ["OUT_FOR_DELIVERY", "CANCELLED", "REFUND_PENDING"],
+  CONFIRMED: ["OUT_FOR_DELIVERY", "CANCELLED", "REFUND_PENDING"],
+  PREPARING: ["OUT_FOR_DELIVERY", "CANCELLED", "REFUND_PENDING"],
   READY: ["OUT_FOR_DELIVERY", "CANCELLED", "REFUND_PENDING"],
   OUT_FOR_DELIVERY: ["DELIVERED", "REFUND_PENDING"],
   DELIVERED: ["REFUND_PENDING"],

@@ -204,7 +204,7 @@ async function main() {
   check("6.5 Status history recorded", order.statusHistory.length >= 3);
   check("6.6 Confirmation email logged", order.emailLogs.length > 0);
 
-  const flow = ["CONFIRMED", "PREPARING", "READY", "OUT_FOR_DELIVERY", "DELIVERED"];
+  const flow = ["OUT_FOR_DELIVERY", "DELIVERED"];
   for (let i = 0; i < flow.length; i++) {
     const r = await a.req("PATCH", `/api/admin/orders/${orderNumber}/status`, { status: flow[i] });
     check(`6.${7 + i} Status → ${flow[i]}`, r.status === 200);

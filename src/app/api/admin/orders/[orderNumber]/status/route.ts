@@ -5,7 +5,7 @@ import { updateOrderStatus } from "@/services/order-status.service";
 import { updateOrderStatusSchema } from "@/lib/validations";
 import { handleApiError, jsonError } from "@/lib/api-helpers";
 import { confirmPaymentPaid } from "@/services/payment.service";
-import { sendOrderConfirmation, sendOrderCancelled, sendOrderOutForDelivery } from "@/services/order-email.service";
+import { sendOrderConfirmation, sendOrderCancelled, sendOrderOutForDelivery, sendOrderDelivered } from "@/services/order-email.service";
 
 type Params = { params: { orderNumber: string } };
 
@@ -57,6 +57,11 @@ export async function PATCH(request: Request, { params }: Params) {
     // Notify the customer when the order is dispatched.
     if (data.status === "OUT_FOR_DELIVERY") {
       await sendOrderOutForDelivery(order.orderNumber);
+    }
+
+    // Notify the customer when the order is delivered.
+    if (data.status === "DELIVERED") {
+      await sendOrderDelivered(order.orderNumber);
     }
 
     return NextResponse.json({ ok: true, paymentConfirmed });

@@ -237,6 +237,42 @@ export async function sendOrderOutForDeliveryEmail(order: Order & { items: Order
   });
 }
 
+export async function sendOrderDeliveredEmail(order: Order & { items: OrderItem[] }): Promise<boolean> {
+  const itemsHtml = renderItemsTable(order);
+  const html = `<!DOCTYPE html>
+<html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
+  <div style="max-width:640px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+    <div style="background:#0B0E11;padding:20px 28px;">
+      <h1 style="color:#A3FF12;margin:0;font-size:22px;">${BUSINESS_NAME}</h1>
+    </div>
+    <div style="padding:28px;">
+      <h2 style="color:#111827;margin:0 0 8px;">Order Delivered ✅</h2>
+      <p style="color:#374151;margin:0 0 16px;">Hi ${order.customerName}, your order <strong>${order.orderNumber}</strong> has been delivered. We hope you enjoy it!</p>
+      <table style="width:100%;font-size:14px;color:#374151;border-collapse:collapse;">
+        <tr><td style="padding:4px 0;">Delivered at</td><td style="text-align:right;">${formatDateTimeIST(order.deliveredAt ?? new Date())}</td></tr>
+        <tr><td style="padding:4px 0;">Order status</td><td style="text-align:right;">${ORDER_STATUS_LABELS[order.orderStatus]}</td></tr>
+        <tr><td style="padding:4px 0;">Amount paid</td><td style="text-align:right;">${formatINR(order.grandTotal)}</td></tr>
+      </table>
+      ${itemsHtml}
+      <h3 style="color:#111827;margin:24px 0 8px;">Delivery address</h3>
+      <p style="color:#374151;font-size:14px;white-space:pre-line;margin:0;">${order.deliveryAddressSnapshot}</p>
+      <p style="margin-top:24px;"><a href="${env.NEXT_PUBLIC_APP_URL}/account/orders/${order.orderNumber}" style="background:#A3FF12;color:#0A0F00;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">View Your Order</a></p>
+      <p style="color:#6b7280;font-size:13px;margin-top:28px;">Questions? Call us at ${BUSINESS_PHONE} or email ${BUSINESS_EMAIL}.<br/>${BUSINESS_ADDRESS}</p>
+    </div>
+  </div>
+</body></html>`;
+
+  return sendEmail({
+    to: order.customerEmail,
+    subject: `Order Delivered — #${order.orderNumber}`,
+    html,
+    template: "order-delivered",
+    userId: order.userId,
+    orderId: order.id
+  });
+}
+
+
 export async function sendAdminOrderPlacedEmail(
   order: Order & { items: OrderItem[] }
 ): Promise<boolean> {
@@ -287,6 +323,58 @@ export async function sendAdminOrderPlacedEmail(
     orderId: order.id
   });
 }
+
+export async function sendPasswordResetEmail(params: { userId: string; email: string; name: string; resetUrl: string }): Promise<boolean> {
+  const html = `<!DOCTYPE html>
+<html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
+  <div style="max-width:640px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+    <div style="background:#0B0E11;padding:20px 28px;">
+      <h1 style="color:#A3FF12;margin:0;font-size:22px;">${BUSINESS_NAME}</h1>
+    </div>
+    <div style="padding:28px;">
+      <h2 style="color:#111827;margin:0 0 8px;">Reset your password</h2>
+      <p style="color:#374151;margin:0 0 16px;">Hi ${params.name}, we received a request to reset your account password. If this was you, use the button below to choose a new one.</p>
+      <p style="margin:0 0 24px;"><a href="${params.resetUrl}" style="background:#A3FF12;color:#0A0F00;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">Reset Password</a></p>
+      <p style="color:#6b7280;font-size:13px;margin:0 0 8px;">Or copy and paste this link into your browser:</p>
+      <p style="color:#374151;font-size:13px;word-break:break-all;margin:0;">${params.resetUrl}</p>
+      <p style="color:#6b7280;font-size:13px;margin-top:16px;">This link is valid for 1 hour. If you did not request this, you can safely ignore this email — your password will not be changed.</p>
+    </div>
+  </div>
+</body></html>`;
+
+  return sendEmail({
+    to: params.email,
+    subject: `Reset your password — ${BUSINESS_NAME}`,
+    html,
+    template: "password-reset",
+    userId: params.userId
+  });
+}
+
+export async function sendPasswordChangedEmail(params: { userId: string; email: string; name: string }): Promise<boolean> {
+  const html = `<!DOCTYPE html>
+<html><body style="font-family:Arial,Helvetica,sans-serif;background:#f4f5f7;margin:0;padding:24px;">
+  <div style="max-width:640px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+    <div style="background:#0B0E11;padding:20px 28px;">
+      <h1 style="color:#A3FF12;margin:0;font-size:22px;">${BUSINESS_NAME}</h1>
+    </div>
+    <div style="padding:28px;">
+      <h2 style="color:#111827;margin:0 0 8px;">Your password was changed</h2>
+      <p style="color:#374151;margin:0 0 16px;">Hi ${params.name}, your ${BUSINESS_NAME} account password was successfully changed. If this wasn't you, please contact us immediately at ${BUSINESS_EMAIL}.</p>
+      <p style="color:#6b7280;font-size:13px;margin-top:16px;">Questions? Call us at ${BUSINESS_PHONE} or email ${BUSINESS_EMAIL}.<br/>${BUSINESS_ADDRESS}</p>
+    </div>
+  </div>
+</body></html>`;
+
+  return sendEmail({
+    to: params.email,
+    subject: `Your password was changed — ${BUSINESS_NAME}`,
+    html,
+    template: "password-changed",
+    userId: params.userId
+  });
+}
+
 
 
 

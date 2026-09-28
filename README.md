@@ -91,13 +91,22 @@ npx prisma migrate deploy  # apply migrations (production)
 
 For CockroachDB: keep `?sslmode=verify-full`. If your driver needs an explicit CA certificate, download the CockroachDB Cloud root cert and append `&sslrootcert=<path>` — **do not disable certificate verification**.
 
-## 9. Seeding & First Admin
+## 9. Seeding, Admin & Data Cleanup
 
 ```bash
-npm run prisma:seed
+npm run prisma:push    # sync the Prisma schema to the DB (idempotent)
+npm run prisma:seed    # create/update the admin user + store menu
 ```
 
-Seeds 5 categories, 15 products, 3 demo customers (password `Customer!123`), demo orders in various statuses/payments, and the admin user from `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` (hashed with bcrypt). To promote an existing user, update `role` to `ADMIN` via a Prisma script — never manual table edits in production.
+`prisma:seed` creates/updates the admin account (from `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`) and seeds 5 categories + 15 products. It no longer creates demo customers or demo orders.
+
+To trim the database down to **only** the store owner and the admin (removing all other users and their transactions/orders/carts/addresses/emails), run once during setup:
+
+```bash
+npm run prisma:prune
+```
+
+`KEEP_USER_EMAIL=srikantak@yahoo.com` and `SEED_ADMIN_EMAIL=srikantak1@gmail.com` are the two accounts that survive the prune.
 
 ## 10. Running
 
@@ -127,9 +136,27 @@ npm test           # vitest (17 tests)
 
 Configure SMTP (`EMAIL_*`). Confirmation emails are sent **only after verified payment**; failures are recorded in `EmailLog` and never change payment/order status.
 
-## 14. Deployment
+## 14. Deployment (Render.com)
 
-Deploy to Vercel/Railway/Render/Fly.io with `NODE_ENV=production`, HTTPS, and all secrets in the platform's secret manager. Point the payment webhook at the deployed domain. `/admin`, `/account`, `/checkout` and `/api` are excluded from the sitemap.
+A Blueprint is provided in `render.yaml`. Steps:
+
+1. Push this repo to GitHub.
+2. Render → **New → Blueprint** → select the repo.
+3. In the Render dashboard (or a `.env` on your machine) set the secret env vars (leave `sync: false` values uncommitted):
+   - `DATABASE_URL` — your CockroachDB/Postgres URL (e.g. `postgresql://srikanta:***@dogged-ant-20102.../defaultdb?sslmode=verify-full`; use `verify-full` in production and add `&sslrootcert=<path>` if needed).
+   - `AUTH_SECRET` — long random string (min 16 chars).
+   - `NEXT_PUBLIC_APP_URL` / `NEXTAUTH_URL` — `https://<your-app>.onrender.com`.
+   - `EMAIL_PASSWORD` — your Gmail app password.
+4. The first deploy runs `prisma db push --skip-generate && prisma seed`, which creates the schema and the admin (`srikantak1@gmail.com` / password from `SEED_ADMIN_PASSWORD`).
+5. After the site is up, run once in the **Render Shell** (or locally against the same DB):
+   ```
+   npm run prisma:prune
+   ```
+   This keeps only `srikantak@yahoo.com` + the admin and removes all other users/transactions.
+
+`NODE_ENV=production` and `PAYMENT_MODE=direct` are set in the blueprint (mock is blocked in production). Point the UPI/Razorpay webhook at `https://<your-app>.onrender.com/api/webhooks/payment` if you switch to `PAYMENT_MODE=razorpay`.
+
+`/admin`, `/account`, `/checkout` and `/api` are excluded from the sitemap.
 
 ## 15. Security Summary
 

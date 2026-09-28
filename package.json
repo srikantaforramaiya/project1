@@ -13,7 +13,10 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
+    "prisma:push": "prisma db push",
     "prisma:seed": "tsx prisma/seed.ts",
+    "prisma:admin": "tsx prisma/create-admin.ts",
+    "prisma:prune": "tsx prisma/prune-users.ts",
     "postinstall": "prisma generate"
   },
   "prisma": {

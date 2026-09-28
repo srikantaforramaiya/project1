@@ -1,19 +1,21 @@
 import { Check, Circle } from "lucide-react";
 import { ORDER_STATUS_LABELS, formatDateTimeIST } from "@/lib/store-config";
 
-const TIMELINE: { status: string; dateField: "confirmedAt" | "preparingAt" | "readyAt" | "dispatchedAt" | "deliveredAt" | null }[] = [
+const TIMELINE: { status: string; dateField: "confirmedAt" | "dispatchedAt" | "deliveredAt" | null }[] = [
   { status: "PENDING_PAYMENT", dateField: null },
   { status: "PAYMENT_RECEIVED", dateField: "confirmedAt" },
-  { status: "CONFIRMED", dateField: "confirmedAt" },
-  { status: "PREPARING", dateField: "preparingAt" },
-  { status: "READY", dateField: "readyAt" },
   { status: "OUT_FOR_DELIVERY", dateField: "dispatchedAt" },
   { status: "DELIVERED", dateField: "deliveredAt" }
 ];
 
 const STATUS_ORDER_INDEX: Record<string, number> = {
-  PENDING_PAYMENT: 0, PAYMENT_RECEIVED: 1, CONFIRMED: 2, PREPARING: 3, READY: 4,
-  OUT_FOR_DELIVERY: 5, DELIVERED: 6, CANCELLED: -1, REFUND_PENDING: -1, REFUNDED: -1
+  PENDING_PAYMENT: 0,
+  PAYMENT_RECEIVED: 1,
+  // Legacy intermediate states map onto the nearest visible stage so old orders still render.
+  CONFIRMED: 1, PREPARING: 1, READY: 2,
+  OUT_FOR_DELIVERY: 2,
+  DELIVERED: 3,
+  CANCELLED: -1, REFUND_PENDING: -1, REFUNDED: -1
 };
 
 export function OrderTimeline({ order }: { order: { orderStatus: string; createdAt: Date; confirmedAt: Date | null; preparingAt: Date | null; readyAt: Date | null; dispatchedAt: Date | null; deliveredAt: Date | null; cancelledAt: Date | null } }) {
