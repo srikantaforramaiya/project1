@@ -12,7 +12,7 @@ async function main() {
   console.log("Seeding database...");
 
   const adminEmail = process.env.SEED_ADMIN_EMAIL || "srikantak1@gmail.com";
-  const adminPassword = process.env.SEED_ADMIN_PASSWORD || "Oic1903!";
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD || "[REDACTED]";
   const adminHash = await bcrypt.hash(adminPassword, 12);
 
   await prisma.user.upsert({

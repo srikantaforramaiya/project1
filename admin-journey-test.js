@@ -43,7 +43,7 @@ async function main() {
   await custLogin.req("POST", "/api/auth/login", { email: "priya@example.com", password: "Customer!123" });
   const custBlocked = await custLogin.req("GET", "/api/admin/products");
   check("A1.2 Customer blocked from admin API", custBlocked.status === 403);
-  check("A1.3 Admin login", (await a.req("POST", "/api/auth/login", { email: "admin@neonbites.test", password: "ChangeMe!123" })).status === 200);
+  check("A1.3 Admin login", (await a.req("POST", "/api/auth/login", { email: "admin@neonbites.test", password: "[REDACTED]" })).status === 200);
 
   // 2. Dashboard page renders
   const dash = await a.req("GET", "/admin", null, true);
@@ -138,7 +138,7 @@ async function main() {
 
   // 7. Payments, reports, exports
   const payPage = await a.req("GET", "/admin/payments", null, true);
-  check("A7.1 Payments page renders (gateway secrets hidden)", payPage.status === 200 && payPage.text.includes("Payments") && !payPage.text.includes("Oic1903"));
+  check("A7.1 Payments page renders (gateway secrets hidden)", payPage.status === 200 && payPage.text.includes("Payments") && !payPage.text.includes("[REDACTED]"));
   const repPage = await a.req("GET", "/admin/reports", null, true);
   check("A7.2 Reports page renders with KPIs", repPage.status === 200 && repPage.text.includes("Reports") && repPage.text.includes("Revenue"));
   const customRep = await a.req("GET", "/admin/reports/custom?preset=last_30_days&dimension=day&metrics=revenue,order_count", null, true);

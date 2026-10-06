@@ -31,7 +31,7 @@ services:
       - key: SEED_ADMIN_EMAIL
         value: srikantak1@gmail.com
       - key: SEED_ADMIN_PASSWORD
-        value: Oic1903!
+        value: [REDACTED]
       - key: KEEP_USER_EMAIL
         value: srikantak@yahoo.com
       # Secrets — set these in the Render dashboard, do NOT commit values.

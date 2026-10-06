@@ -191,7 +191,7 @@ async function main() {
 
   // ── 6. Admin verification & order lifecycle ──
   const a = makeClient();
-  check("6.1 Admin login", (await a.req("POST", "/api/auth/login", { email: "admin@neonbites.test", password: "ChangeMe!123" })).status === 200);
+  check("6.1 Admin login", (await a.req("POST", "/api/auth/login", { email: "admin@neonbites.test", password: "[REDACTED]" })).status === 200);
   const custBlocked = await c.req("PATCH", `/api/admin/orders/${orderNumber}/status`, { status: "CONFIRMED" });
   check("6.2 Customer blocked from admin API", custBlocked.status === 403);
 

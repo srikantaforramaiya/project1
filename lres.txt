@@ -1,0 +1,1 @@
+{"user":{"id":"cmumrq4hy0010ls57v0gg7jl4","name":"Srikanta Customer","email":"srikantak@yahoo.com","role":"CUSTOMER"}}

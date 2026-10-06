@@ -1,6 +1,6 @@
 # Neon Bites — Local Food Ordering Website
 
-A complete, production-ready food ordering e-commerce application for a local food seller, built with **Next.js 14 (App Router)**, **TypeScript**, **Prisma** and **CockroachDB/PostgreSQL**, with **UPI-only payments**, email confirmations, a full admin dashboard and a reporting system — in a premium **dark neon** design.
+A complete, production-ready food ordering e-commerce application for a local food seller, built with **Next.js 14 (App Router)**, **TypeScript**, **Prisma** and **Aiven PostgreSQL**, with **UPI-only payments**, email confirmations, a full admin dashboard and a reporting system — in a premium **dark neon** design.
 
 ## 1. Overview
 
@@ -31,7 +31,7 @@ A complete, production-ready food ordering e-commerce application for a local fo
 | Framework | Next.js 14.2 (App Router, server components) |
 | Language | TypeScript (strict) |
 | UI | Tailwind CSS 3.4, lucide-react, Recharts |
-| DB | CockroachDB (PostgreSQL-compatible) via Prisma ORM |
+| DB | Aiven PostgreSQL via Prisma ORM |
 | Auth | Custom JWT sessions (`jose`) + `bcryptjs` |
 | Validation | Zod (shared client/server schemas) |
 | Email | Nodemailer (SMTP abstraction) |
@@ -57,7 +57,7 @@ tests/                # vitest unit tests
 ## 5. Prerequisites
 
 - Node.js 18.18+ (Node 20/22 recommended), npm
-- A CockroachDB Cloud (or PostgreSQL) database
+- A Aiven PostgreSQL database (see `DATABASE_URL` in `.env`)
 - (Optional, production) Razorpay account, SMTP email account
 
 ## 6. Installation
@@ -71,7 +71,7 @@ copy .env.example .env        # Windows (cp on macOS/Linux)
 
 | Variable | Purpose |
 |---|---|
-| `DATABASE_URL` | CockroachDB/PostgreSQL connection string (replace `<ENTER-SQL-USER-PASSWORD>` with the real password). Keep `sslmode=verify-full`. |
+| `DATABASE_URL` | Aiven PostgreSQL connection string (replace `<ENTER-PASSWORD>` with the real password). Keep `sslmode=require`. |
 | `AUTH_SECRET` | Long random string for signing sessions (min 16 chars) |
 | `NEXTAUTH_URL` / `NEXT_PUBLIC_APP_URL` | Public app URL |
 | `PAYMENT_MODE` | `mock` (dev) or `razorpay` |
@@ -89,7 +89,7 @@ npx prisma migrate dev     # create + apply migrations (development)
 npx prisma migrate deploy  # apply migrations (production)
 ```
 
-For CockroachDB: keep `?sslmode=verify-full`. If your driver needs an explicit CA certificate, download the CockroachDB Cloud root cert and append `&sslrootcert=<path>` — **do not disable certificate verification**.
+For Aiven PostgreSQL: keep `?sslmode=require`. If your driver needs an explicit CA certificate, download the Aiven CA cert and append `&sslrootcert=<path>` — **do not disable certificate verification**.
 
 ## 9. Seeding, Admin & Data Cleanup
 
@@ -143,7 +143,7 @@ A Blueprint is provided in `render.yaml`. Steps:
 1. Push this repo to GitHub.
 2. Render → **New → Blueprint** → select the repo.
 3. In the Render dashboard (or a `.env` on your machine) set the secret env vars (leave `sync: false` values uncommitted):
-   - `DATABASE_URL` — your CockroachDB/Postgres URL (e.g. `postgresql://srikanta:***@dogged-ant-20102.../defaultdb?sslmode=verify-full`; use `verify-full` in production and add `&sslrootcert=<path>` if needed).
+   - `DATABASE_URL` — your Aiven PostgreSQL URL (e.g. `postgresql://avnadmin:***@pg-1197dc1b-srikanta-project1.f.aivencloud.com:25176/defaultdb?sslmode=require`).
    - `AUTH_SECRET` — long random string (min 16 chars).
    - `NEXT_PUBLIC_APP_URL` / `NEXTAUTH_URL` — `https://<your-app>.onrender.com`.
    - `EMAIL_PASSWORD` — your Gmail app password.
@@ -172,7 +172,7 @@ A Blueprint is provided in `render.yaml`. Steps:
 ## 16. Troubleshooting
 
 - **`Invalid environment configuration`** — a required env var is missing; the error lists keys (never values).
-- **CockroachDB SSL errors** — verify CA cert/`sslmode=verify-full`; never use `sslmode=disable`.
+- **SSL errors** — verify CA cert/`sslmode=require`; never use `sslmode=disable`.
 - **Emails not sending** — `EMAIL_*` not configured; attempts logged as FAILED in `EmailLog`.
 - **Payments show "mock"** — set `PAYMENT_MODE=razorpay` plus keys for real UPI payments.
 

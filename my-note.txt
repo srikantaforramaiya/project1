@@ -1,12 +1,12 @@
-My Notes1 -
+ÿþMy Notes1 -
 
-srikantak / Oic1903!
+srikantak / [REDACTED]
 
 https://github.com/srikantaforramaiya/project1.git
 
 
 
-db_url = "postgresql://srikanta:Oic1903!@dogged-ant-20102.jxf.gcp-asia-south1.cockroachlabs.cloud:26257/defaultdb?sslmode=require"
+db_url = "postgresql://avnadmin:[REDACTED]@pg-1197dc1b-srikanta-project1.f.aivencloud.com:25176/defaultdb?sslmode=require"
 
 
 

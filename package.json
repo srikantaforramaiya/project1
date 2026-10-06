@@ -17,6 +17,8 @@
     "prisma:seed": "tsx prisma/seed.ts",
     "prisma:admin": "tsx prisma/create-admin.ts",
     "prisma:prune": "tsx prisma/prune-users.ts",
+    "prisma:transfer": "tsx prisma/transfer-db.ts",
+    "prisma:bootstrap": "tsx prisma/bootstrap.ts",
     "postinstall": "prisma generate"
   },
   "prisma": {

@@ -13,7 +13,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   const adminEmail = (process.env.SEED_ADMIN_EMAIL || "srikantak1@gmail.com").trim().toLowerCase();
-  const adminPassword = process.env.SEED_ADMIN_PASSWORD || "Oic1903!";
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD || "[REDACTED]";
   const keeperEmail = (process.env.KEEP_USER_EMAIL || "srikantak@yahoo.com").trim().toLowerCase();
 
   // 1. Ensure the admin account exists (idempotent).

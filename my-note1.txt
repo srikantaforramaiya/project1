@@ -1,11 +1,11 @@
+ˇ˛
 
-
-srikantak@yahoo.com / Abcd!@#$
+srikantak@yahoo.com / [REDACTED]
 
 
 Admin ID (email)	Name	Role	Password
-admin@neonbites.test	Store Admin	ADMIN	ChangeMe!123
-srikantak1@gmail.com	Store Admin	ADMIN	ChangeMe!123
+admin@neonbites.test	Store Admin	ADMIN	[REDACTED]
+srikantak1@gmail.com	Store Admin	ADMIN	[REDACTED]
 
 
 npm run dev
@@ -22,15 +22,40 @@ git clone https://github.com/srikantaforramaiya/project1.git
 
 ### ‚ö†Ô∏è Things to set manually in Render (secrets, marked `sync: false`)
 
-- `DATABASE_URL` (CockroachDB URL; keep `sslmode=verify-full` in production)
+- `DATABASE_URL` (Aiven PostgreSQL URL; keep `sslmode=require` in production)
 - `AUTH_SECRET` (long random string, ‚â•16 chars)
 - `NEXT_PUBLIC_APP_URL` / `NEXTAUTH_URL` (`https://<your-app>.onrender.com`)
 - `EMAIL_PASSWORD` (Gmail app password)
 
 ### Note on the database
 
-There is __no checked-in `prisma/migrations` folder__ (only a single `migration.sql`), so the Render pre-deploy uses `prisma db push` (idempotent) to sync your schema to CockroachDB rather than `migrate deploy`. If you prefer migrations, I can convert `migration.sql` into a proper `prisma/migrations` folder.
+There is __no checked-in `prisma/migrations` folder__ (only a single `migration.sql`), so the Render pre-deploy uses `prisma db push` (idempotent) to sync your schema to Aiven PostgreSQL rather than `migrate deploy`. If you prefer migrations, I can convert `migration.sql` into a proper `prisma/migrations` folder.
 
 I verified the project passes `npm run typecheck` (empty error output) and cleaned up all temporary files I created during the work.
 
 
+===============================
+postgres://avnadmin:[REDACTED]@pg-1197dc1b-srikanta-project1.f.aivencloud.com:25176/defaultdb?sslmode=require
+
+
+https://console.aiven.io/account/a5e40ccce8e5/project/srikanta-project1/services/pg-1197dc1b/overview
+
+npm run dev
+
+
+Now pls use DB as
+postgres://avnadmin:[REDACTED]@pg-1197dc1b-srikanta-project1.f.aivencloud.com:25176/defaultdb?sslmode=require
+
+
+
+1.Please create all tables with sample data except user and tranactions.
+you may refer code file and md file for table structure and sample data.
+
+2. Create a admin user as srikantak1@gmail.com and password is [REDACTED]
+
+3. Create a customer user as srikantak@yahoo.com and password is [REDACTED]
+
+Stop the running server (Ctrl+C in its terminal), then:
+npm run prisma:generate     # must succeed now (no file lock)
+npm run prisma:push         # ensure schema on Aiven
+npm run dev   
